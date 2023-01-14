@@ -1,0 +1,394 @@
+package com.itskillerluc.duclib.client.model;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.UVPair;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.joml.*;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+/**
+ * Duclings are the DucLib equivalent of the vanilla ModelParts.
+ */
+public final class Ducling {
+    public static final float DEFAULT_SCALE = 1.0F;
+    public float x;
+    public float y;
+    public float z;
+    public float xRot;
+    public float yRot;
+    public float zRot;
+    public float xScale = 1.0F;
+    public float yScale = 1.0F;
+    public float zScale = 1.0F;
+    public boolean visible = true;
+    public boolean skipDraw;
+    private final List<Wing> wings;
+    private final Map<String, Ducling> children;
+    private PartPose initialPose = PartPose.ZERO;
+
+    public Ducling(List<Wing> pWings, Map<String, Ducling> pChildren) {
+        this.wings = pWings;
+        this.children = pChildren;
+    }
+
+    /**
+     * save the partPose
+     * @return the new partPose
+     */
+    public PartPose storePose() {
+        return PartPose.offsetAndRotation(this.x, this.y, this.z, this.xRot, this.yRot, this.zRot);
+    }
+
+    /**
+     * @return the default partPose
+     */
+    public PartPose getInitialPose() {
+        return this.initialPose;
+    }
+
+    /**
+     * set the default partPose
+     * @param pInitialPose the default partPose
+     */
+    public void setInitialPose(PartPose pInitialPose) {
+        this.initialPose = pInitialPose;
+    }
+
+    /**
+     * reset the partPose
+     */
+    public void resetPose() {
+        this.loadPose(this.initialPose);
+    }
+
+    /**
+     * @param pPartPose load a partPose into the ducling
+     */
+    public void loadPose(PartPose pPartPose) {
+        this.x = pPartPose.x;
+        this.y = pPartPose.y;
+        this.z = pPartPose.z;
+        this.xRot = pPartPose.xRot;
+        this.yRot = pPartPose.yRot;
+        this.zRot = pPartPose.zRot;
+        this.xScale = 1.0F;
+        this.yScale = 1.0F;
+        this.zScale = 1.0F;
+    }
+
+    /**
+     * @param ducling copy a partPose from another ducling
+     */
+    public void copyFrom(Ducling ducling) {
+        this.xScale = ducling.xScale;
+        this.yScale = ducling.yScale;
+        this.zScale = ducling.zScale;
+        this.xRot = ducling.xRot;
+        this.yRot = ducling.yRot;
+        this.zRot = ducling.zRot;
+        this.x = ducling.x;
+        this.y = ducling.y;
+        this.z = ducling.z;
+    }
+
+    public boolean hasChild(String pName) {
+        return this.children.containsKey(pName);
+    }
+
+    public Ducling getChild(String pName) {
+        Ducling ducling = this.children.get(pName);
+        if (ducling == null) {
+            throw new NoSuchElementException("Can't find part " + pName);
+        } else {
+            return ducling;
+        }
+    }
+
+    /**
+     * set the position of this ducling
+     */
+    public void setPos(float pX, float pY, float pZ) {
+        this.x = pX;
+        this.y = pY;
+        this.z = pZ;
+    }
+
+    /**
+     * set the rotation of this ducling
+     */
+    public void setRotation(float pXRot, float pYRot, float pZRot) {
+        this.xRot = pXRot;
+        this.yRot = pYRot;
+        this.zRot = pZRot;
+    }
+
+    /**
+     * render the ducling
+     */
+    public void render(PoseStack pPoseStack, VertexConsumer pVertexConsumer, int pPackedLight, int pPackedOverlay) {
+        this.render(pPoseStack, pVertexConsumer, pPackedLight, pPackedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
+    }
+
+    /**
+     * render the ducling
+     */
+    public void render(PoseStack pPoseStack, VertexConsumer pVertexConsumer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
+        if (this.visible) {
+            if (!this.wings.isEmpty() || !this.children.isEmpty()) {
+                pPoseStack.pushPose();
+                this.translateAndRotate(pPoseStack);
+                if (!this.skipDraw) {
+                    this.compile(pPoseStack.last(), pVertexConsumer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+                }
+
+                for(Ducling ducling : this.children.values()) {
+                    ducling.render(pPoseStack, pVertexConsumer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+                }
+
+                pPoseStack.popPose();
+            }
+        }
+    }
+
+    public void visit(PoseStack pPoseStack, Ducling.Visitor pVisitor) {
+        this.visit(pPoseStack, pVisitor, "");
+    }
+
+    private void visit(PoseStack pPoseStack, Ducling.Visitor pVisitor, String path) {
+        if (!this.wings.isEmpty() || !this.children.isEmpty()) {
+            pPoseStack.pushPose();
+            this.translateAndRotate(pPoseStack);
+            PoseStack.Pose posestack$pose = pPoseStack.last();
+
+            for(int i = 0; i < this.wings.size(); ++i) {
+                pVisitor.visit(posestack$pose, path, i, this.wings.get(i));
+            }
+
+            String s = path + "/";
+            this.children.forEach((pth, child) -> child.visit(pPoseStack, pVisitor, s + pth));
+            pPoseStack.popPose();
+        }
+    }
+
+    public void translateAndRotate(PoseStack pPoseStack) {
+        pPoseStack.translate(this.x / 16.0F, this.y / 16.0F, this.z / 16.0F);
+        if (this.xRot != 0.0F || this.yRot != 0.0F || this.zRot != 0.0F) {
+            pPoseStack.mulPose((new Quaternionf()).rotationZYX(this.zRot, this.yRot, this.xRot));
+        }
+
+        if (this.xScale != 1.0F || this.yScale != 1.0F || this.zScale != 1.0F) {
+            pPoseStack.scale(this.xScale, this.yScale, this.zScale);
+        }
+
+    }
+
+    /**
+     * render all the wings of this ducling
+     */
+    private void compile(PoseStack.Pose pPose, VertexConsumer pVertexConsumer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
+        for(Wing ducling$wing : this.wings) {
+            ducling$wing.compile(pPose, pVertexConsumer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+        }
+
+    }
+
+    public Wing getRandomWing(RandomSource pRandom) {
+        return this.wings.get(pRandom.nextInt(this.wings.size()));
+    }
+
+    public boolean isEmpty() {
+        return this.wings.isEmpty();
+    }
+
+    public void offsetPos(Vector3f offset) {
+        this.x += offset.x();
+        this.y += offset.y();
+        this.z += offset.z();
+    }
+
+    public void offsetRotation(Vector3f offset) {
+        this.xRot += offset.x();
+        this.yRot += offset.y();
+        this.zRot += offset.z();
+    }
+
+    public void offsetScale(Vector3f offset) {
+        this.xScale += offset.x();
+        this.yScale += offset.y();
+        this.zScale += offset.z();
+    }
+
+    public Stream<Ducling> getAllDuclings() {
+        return Stream.concat(Stream.of(this), this.children.values().stream().flatMap(Ducling::getAllDuclings));
+    }
+
+    record AdvancedUV(Direction direction, UVPair uv, UVPair uvSize) {}
+
+    @OnlyIn(Dist.CLIENT)
+    public static class Wing {
+        private final Feather[] feathers;
+        public final float x1;
+        public final float y1;
+        public final float z1;
+        public final float x2;
+        public final float y2;
+        public final float z2;
+
+        /**
+         * this is the DucLib equivalent of ModelPart$Cube
+         */
+        public Wing(AdvancedUV[] featherUVs, float originX, float originY, float originZ, float pDimensionX, float pDimensionY, float pDimensionZ, float pGrowX, float pGrowY, float pGrowZ, boolean pMirror, float pTexWidthScaled, float pTexHeightScaled) {
+            this.x1 = originX;
+            this.y1 = originY;
+            this.z1 = originZ;
+
+            this.x2 = originX + pDimensionX;
+            this.y2 = originY + pDimensionY;
+            this.z2 = originZ + pDimensionZ;
+
+            this.feathers = new Feather[6];
+
+            float x = originX + pDimensionX;
+            float y = originY + pDimensionY;
+            float z = originZ + pDimensionZ;
+
+            originX -= pGrowX;
+            originY -= pGrowY;
+            originZ -= pGrowZ;
+
+            x += pGrowX;
+            y += pGrowY;
+            z += pGrowZ;
+
+            if (pMirror) {
+                float f3 = x;
+                x = originX;
+                originX = f3;
+            }
+
+            //(0, 0, 0)
+            Barb ducling$barb7 = new Barb(originX, originY, originZ, 0.0F, 0.0F);
+            //(1, 0, 0)
+            Barb ducling$barb = new Barb(x, originY, originZ, 0.0F, 8.0F);
+            //(1, 1, 0)
+            Barb ducling$barb1 = new Barb(x, y, originZ, 8.0F, 8.0F);
+            //(0, 1, 0)
+            Barb ducling$barb2 = new Barb(originX, y, originZ, 8.0F, 0.0F);
+            //(0, 0, 1)
+            Barb ducling$barb3 = new Barb(originX, originY, z, 0.0F, 0.0F);
+            //(1, 0, 1)
+            Barb ducling$barb4 = new Barb(x, originY, z, 0.0F, 8.0F);
+            //(1, 1, 1)
+            Barb ducling$barb5 = new Barb(x, y, z, 8.0F, 8.0F);
+            //(0, 1, 1)
+            Barb ducling$barb6 = new Barb(originX, y, z, 8.0F, 0.0F);
+
+            Map<Direction, AdvancedUV> featherUVMap = Arrays.stream(featherUVs).collect(Collectors.toMap(key -> key.direction, value -> value));
+
+            this.feathers[2] = new Feather(new Barb[]{ducling$barb4, ducling$barb3, ducling$barb7, ducling$barb}, featherUVMap.get(Direction.DOWN).uv().u(), featherUVMap.get(Direction.DOWN).uv().v(), featherUVMap.get(Direction.DOWN).uv().u() + featherUVMap.get(Direction.DOWN).uvSize().u(), featherUVMap.get(Direction.DOWN).uv().v() + featherUVMap.get(Direction.DOWN).uvSize.v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.DOWN);
+            this.feathers[3] = new Feather(new Barb[]{ducling$barb1, ducling$barb2, ducling$barb6, ducling$barb5}, featherUVMap.get(Direction.UP).uv().u(), featherUVMap.get(Direction.UP).uv().v(), featherUVMap.get(Direction.UP).uv().u() + featherUVMap.get(Direction.UP).uvSize.u(), featherUVMap.get(Direction.UP).uv().v() + featherUVMap.get(Direction.UP).uvSize.v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.UP);
+            this.feathers[1] = new Feather(new Barb[]{ducling$barb7, ducling$barb3, ducling$barb6, ducling$barb2}, featherUVMap.get(Direction.WEST).uv().u(), featherUVMap.get(Direction.WEST).uv().v(), featherUVMap.get(Direction.WEST).uv().u() + featherUVMap.get(Direction.WEST).uvSize.u(), featherUVMap.get(Direction.WEST).uv().v() + featherUVMap.get(Direction.WEST).uvSize.v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.WEST);
+            this.feathers[4] = new Feather(new Barb[]{ducling$barb, ducling$barb7, ducling$barb2, ducling$barb1}, featherUVMap.get(Direction.SOUTH).uv().u(), featherUVMap.get(Direction.SOUTH).uv().v(), featherUVMap.get(Direction.SOUTH).uv().u() + featherUVMap.get(Direction.SOUTH).uvSize.u(), featherUVMap.get(Direction.SOUTH).uv().v() + featherUVMap.get(Direction.SOUTH).uvSize.v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.NORTH);
+            this.feathers[0] = new Feather(new Barb[]{ducling$barb4, ducling$barb, ducling$barb1, ducling$barb5}, featherUVMap.get(Direction.EAST).uv().u(), featherUVMap.get(Direction.EAST).uv().v(), featherUVMap.get(Direction.EAST).uv().u() + featherUVMap.get(Direction.EAST).uvSize.u(), featherUVMap.get(Direction.EAST).uv().v() + featherUVMap.get(Direction.EAST).uvSize.v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.EAST);
+            this.feathers[5] = new Feather(new Barb[]{ducling$barb3, ducling$barb4, ducling$barb5, ducling$barb6}, featherUVMap.get(Direction.NORTH).uv().u(), featherUVMap.get(Direction.NORTH).uv().v(), featherUVMap.get(Direction.NORTH).uv().u() + featherUVMap.get(Direction.NORTH).uvSize.u(), featherUVMap.get(Direction.NORTH).uv().v() + featherUVMap.get(Direction.NORTH).uvSize.v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.SOUTH);
+        }
+
+
+        /**
+         * render the wing
+         */
+        public void compile(PoseStack.Pose pPose, VertexConsumer pVertexConsumer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
+            Matrix4f matrix4f = pPose.pose();
+            Matrix3f matrix3f = pPose.normal();
+
+            for(Feather ducling$feather : this.feathers) {
+                Vector3f vector3f = matrix3f.transform(new Vector3f((Vector3fc) ducling$feather.normal));
+                float f = vector3f.x();
+                float f1 = vector3f.y();
+                float f2 = vector3f.z();
+
+                for(Barb ducling$barb : ducling$feather.vertices) {
+                    float f3 = ducling$barb.pos.x() / 16.0F;
+                    float f4 = ducling$barb.pos.y() / 16.0F;
+                    float f5 = ducling$barb.pos.z() / 16.0F;
+                    Vector4f vector4f = matrix4f.transform(new Vector4f(f3, f4, f5, 1.0F));
+                    pVertexConsumer.vertex(vector4f.x(), vector4f.y(), vector4f.z(), pRed, pGreen, pBlue, pAlpha, ducling$barb.u, ducling$barb.v, pPackedOverlay, pPackedLight, f, f1, f2);
+                }
+            }
+
+        }
+    }
+
+    /**
+     * The DucLib equivalent of ModelPart$Polygon
+     */
+    @OnlyIn(Dist.CLIENT)
+    static class Feather {
+        public final Barb[] vertices;
+        public final Vector3f normal;
+
+        public Feather(Barb[] pVertices, float x1, float y1, float x2, float y2, float textureWidth, float textureHeight, boolean mirror, Direction pDirection) {
+            this.vertices = pVertices;
+            pVertices[0] = pVertices[0].remap(x2 / textureWidth, y1 / textureHeight);
+            pVertices[1] = pVertices[1].remap(x1 / textureWidth, y1 / textureHeight);
+            pVertices[2] = pVertices[2].remap(x1 / textureWidth, y2 / textureHeight);
+            pVertices[3] = pVertices[3].remap(x2 / textureWidth, y2 / textureHeight);
+            if (mirror) {
+                int i = pVertices.length;
+
+                for(int j = 0; j < i / 2; ++j) {
+                    Barb ducling$barb = pVertices[j];
+                    pVertices[j] = pVertices[i - 1 - j];
+                    pVertices[i - 1 - j] = ducling$barb;
+                }
+            }
+
+            this.normal = pDirection.step();
+            if (mirror) {
+                this.normal.mul(-1.0F, 1.0F, 1.0F);
+            }
+
+        }
+    }
+
+    /**
+     * The DucLib equivalent of ModelPart$Vertex
+     */
+    @OnlyIn(Dist.CLIENT)
+    static class Barb {
+        public final Vector3f pos;
+        public final float u;
+        public final float v;
+
+        public Barb(float pX, float pY, float pZ, float pU, float pV) {
+            this(new Vector3f(pX, pY, pZ), pU, pV);
+        }
+
+        public Barb remap(float pU, float pV) {
+            return new Barb(this.pos, pU, pV);
+        }
+
+        public Barb(Vector3f pPos, float pU, float pV) {
+            this.pos = pPos;
+            this.u = pU;
+            this.v = pV;
+        }
+    }
+
+    @FunctionalInterface
+    @OnlyIn(Dist.CLIENT)
+    public interface Visitor {
+        void visit(PoseStack.Pose pPose, String pPath, int pIndex, Wing pWing);
+    }
+}
