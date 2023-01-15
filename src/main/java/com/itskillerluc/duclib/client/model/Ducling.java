@@ -2,6 +2,7 @@ package com.itskillerluc.duclib.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.UVPair;
 import net.minecraft.core.Direction;
@@ -20,7 +21,8 @@ import java.util.stream.Stream;
 /**
  * Duclings are the DucLib equivalent of the vanilla ModelParts.
  */
-public final class Ducling {
+@SuppressWarnings("unused")
+public final class Ducling extends ModelPart{
     public static final float DEFAULT_SCALE = 1.0F;
     public float x;
     public float y;
@@ -38,6 +40,7 @@ public final class Ducling {
     private PartPose initialPose = PartPose.ZERO;
 
     public Ducling(List<Wing> pWings, Map<String, Ducling> pChildren) {
+        super((List<Cube>)(List<?>) pWings, (Map<String, ModelPart>) (Map<String, ?>) pChildren);
         this.wings = pWings;
         this.children = pChildren;
     }
@@ -46,6 +49,7 @@ public final class Ducling {
      * save the partPose
      * @return the new partPose
      */
+    @Override
     public PartPose storePose() {
         return PartPose.offsetAndRotation(this.x, this.y, this.z, this.xRot, this.yRot, this.zRot);
     }
@@ -53,6 +57,7 @@ public final class Ducling {
     /**
      * @return the default partPose
      */
+    @Override
     public PartPose getInitialPose() {
         return this.initialPose;
     }
@@ -61,6 +66,7 @@ public final class Ducling {
      * set the default partPose
      * @param pInitialPose the default partPose
      */
+    @Override
     public void setInitialPose(PartPose pInitialPose) {
         this.initialPose = pInitialPose;
     }
@@ -68,6 +74,7 @@ public final class Ducling {
     /**
      * reset the partPose
      */
+    @Override
     public void resetPose() {
         this.loadPose(this.initialPose);
     }
@@ -75,6 +82,7 @@ public final class Ducling {
     /**
      * @param pPartPose load a partPose into the ducling
      */
+    @Override
     public void loadPose(PartPose pPartPose) {
         this.x = pPartPose.x;
         this.y = pPartPose.y;
@@ -90,7 +98,8 @@ public final class Ducling {
     /**
      * @param ducling copy a partPose from another ducling
      */
-    public void copyFrom(Ducling ducling) {
+    @Override
+    public void copyFrom(ModelPart ducling) {
         this.xScale = ducling.xScale;
         this.yScale = ducling.yScale;
         this.zScale = ducling.zScale;
@@ -102,10 +111,12 @@ public final class Ducling {
         this.z = ducling.z;
     }
 
+    @Override
     public boolean hasChild(String pName) {
         return this.children.containsKey(pName);
     }
 
+    @Override
     public Ducling getChild(String pName) {
         Ducling ducling = this.children.get(pName);
         if (ducling == null) {
@@ -118,6 +129,7 @@ public final class Ducling {
     /**
      * set the position of this ducling
      */
+    @Override
     public void setPos(float pX, float pY, float pZ) {
         this.x = pX;
         this.y = pY;
@@ -127,6 +139,7 @@ public final class Ducling {
     /**
      * set the rotation of this ducling
      */
+    @Override
     public void setRotation(float pXRot, float pYRot, float pZRot) {
         this.xRot = pXRot;
         this.yRot = pYRot;
@@ -136,6 +149,7 @@ public final class Ducling {
     /**
      * render the ducling
      */
+    @Override
     public void render(PoseStack pPoseStack, VertexConsumer pVertexConsumer, int pPackedLight, int pPackedOverlay) {
         this.render(pPoseStack, pVertexConsumer, pPackedLight, pPackedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
     }
@@ -143,6 +157,7 @@ public final class Ducling {
     /**
      * render the ducling
      */
+    @Override
     public void render(PoseStack pPoseStack, VertexConsumer pVertexConsumer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
         if (this.visible) {
             if (!this.wings.isEmpty() || !this.children.isEmpty()) {
@@ -161,18 +176,18 @@ public final class Ducling {
         }
     }
 
-    public void visit(PoseStack pPoseStack, Ducling.Visitor pVisitor) {
+    @Override
+    public void visit(PoseStack pPoseStack, ModelPart.Visitor pVisitor) {
         this.visit(pPoseStack, pVisitor, "");
     }
-
-    private void visit(PoseStack pPoseStack, Ducling.Visitor pVisitor, String path) {
+    private void visit(PoseStack pPoseStack, ModelPart.Visitor pVisitor, String path) {
         if (!this.wings.isEmpty() || !this.children.isEmpty()) {
             pPoseStack.pushPose();
             this.translateAndRotate(pPoseStack);
-            PoseStack.Pose posestack$pose = pPoseStack.last();
+            PoseStack.Pose poseStack$pose = pPoseStack.last();
 
             for(int i = 0; i < this.wings.size(); ++i) {
-                pVisitor.visit(posestack$pose, path, i, this.wings.get(i));
+                pVisitor.visit(poseStack$pose, path, i, this.wings.get(i));
             }
 
             String s = path + "/";
@@ -181,6 +196,7 @@ public final class Ducling {
         }
     }
 
+    @Override
     public void translateAndRotate(PoseStack pPoseStack) {
         pPoseStack.translate(this.x / 16.0F, this.y / 16.0F, this.z / 16.0F);
         if (this.xRot != 0.0F || this.yRot != 0.0F || this.zRot != 0.0F) {
@@ -203,26 +219,31 @@ public final class Ducling {
 
     }
 
-    public Wing getRandomWing(RandomSource pRandom) {
+    @Override
+    public Wing getRandomCube(RandomSource pRandom) {
         return this.wings.get(pRandom.nextInt(this.wings.size()));
     }
 
+    @Override
     public boolean isEmpty() {
         return this.wings.isEmpty();
     }
 
+    @Override
     public void offsetPos(Vector3f offset) {
         this.x += offset.x();
         this.y += offset.y();
         this.z += offset.z();
     }
 
+    @Override
     public void offsetRotation(Vector3f offset) {
         this.xRot += offset.x();
         this.yRot += offset.y();
         this.zRot += offset.z();
     }
 
+    @Override
     public void offsetScale(Vector3f offset) {
         this.xScale += offset.x();
         this.yScale += offset.y();
@@ -233,10 +254,10 @@ public final class Ducling {
         return Stream.concat(Stream.of(this), this.children.values().stream().flatMap(Ducling::getAllDuclings));
     }
 
-    record AdvancedUV(Direction direction, UVPair uv, UVPair uvSize) {}
+    public record AdvancedUV(Direction direction, UVPair uv, UVPair uvSize) {}
 
     @OnlyIn(Dist.CLIENT)
-    public static class Wing {
+    public static class Wing extends ModelPart.Cube{
         private final Feather[] feathers;
         public final float x1;
         public final float y1;
@@ -249,6 +270,7 @@ public final class Ducling {
          * this is the DucLib equivalent of ModelPart$Cube
          */
         public Wing(AdvancedUV[] featherUVs, float originX, float originY, float originZ, float pDimensionX, float pDimensionY, float pDimensionZ, float pGrowX, float pGrowY, float pGrowZ, boolean pMirror, float pTexWidthScaled, float pTexHeightScaled) {
+            super((int) featherUVs[0].uv().u(), (int) featherUVs[0].uv().v(), originX, originY, originZ, pDimensionX, pDimensionY, pDimensionZ, pGrowX, pGrowY, pGrowZ, pMirror, (int)pTexWidthScaled, (int)pTexHeightScaled);
             this.x1 = originX;
             this.y1 = originY;
             this.z1 = originZ;
@@ -304,16 +326,16 @@ public final class Ducling {
             this.feathers[5] = new Feather(new Barb[]{ducling$barb3, ducling$barb4, ducling$barb5, ducling$barb6}, featherUVMap.get(Direction.NORTH).uv().u(), featherUVMap.get(Direction.NORTH).uv().v(), featherUVMap.get(Direction.NORTH).uv().u() + featherUVMap.get(Direction.NORTH).uvSize.u(), featherUVMap.get(Direction.NORTH).uv().v() + featherUVMap.get(Direction.NORTH).uvSize.v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.SOUTH);
         }
 
-
         /**
          * render the wing
          */
+        @Override
         public void compile(PoseStack.Pose pPose, VertexConsumer pVertexConsumer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
             Matrix4f matrix4f = pPose.pose();
             Matrix3f matrix3f = pPose.normal();
 
             for(Feather ducling$feather : this.feathers) {
-                Vector3f vector3f = matrix3f.transform(new Vector3f((Vector3fc) ducling$feather.normal));
+                Vector3f vector3f = matrix3f.transform(new Vector3f(ducling$feather.normal));
                 float f = vector3f.x();
                 float f1 = vector3f.y();
                 float f2 = vector3f.z();
@@ -328,6 +350,8 @@ public final class Ducling {
             }
 
         }
+
+
     }
 
     /**
@@ -388,7 +412,28 @@ public final class Ducling {
 
     @FunctionalInterface
     @OnlyIn(Dist.CLIENT)
-    public interface Visitor {
-        void visit(PoseStack.Pose pPose, String pPath, int pIndex, Wing pWing);
+    public interface Visitor extends ModelPart.Visitor {
+        @Override
+        void visit(PoseStack.Pose pPose, String pPath, int pIndex, Cube pWing);
+    }
+
+    @Override
+    public String toString() {
+        return "Ducling{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", xRot=" + xRot +
+                ", yRot=" + yRot +
+                ", zRot=" + zRot +
+                ", xScale=" + xScale +
+                ", yScale=" + yScale +
+                ", zScale=" + zScale +
+                ", visible=" + visible +
+                ", skipDraw=" + skipDraw +
+                ", wings=" + wings +
+                ", children=" + children +
+                ", initialPose=" + initialPose +
+                '}';
     }
 }
