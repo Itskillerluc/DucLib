@@ -2,8 +2,6 @@ package com.itskillerluc.duclib.client.model.definitions;
 
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MaterialDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
 import org.jetbrains.annotations.NotNull;
 
 /**

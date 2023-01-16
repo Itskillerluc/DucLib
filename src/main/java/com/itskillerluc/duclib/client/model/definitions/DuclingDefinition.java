@@ -48,19 +48,18 @@ public class DuclingDefinition extends PartDefinition {
         return duclingDefinition;
     }
 
-    //TODO
     @Override
     public @NotNull Ducling bake(int pTexWidth, int pTexHeight) {
         Object2ObjectArrayMap<String, Ducling> object2objectarraymap = this.children.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, (p_171593_) -> p_171593_.getValue().bake(pTexWidth, pTexHeight), (p_171595_, p_171596_) -> p_171595_, Object2ObjectArrayMap::new));
-        List<Ducling.Wing> list = this.wings.stream().map((p_171589_) -> p_171589_.bake(pTexWidth, pTexHeight)).collect(ImmutableList.toImmutableList());
-        Ducling modelpart = new Ducling(list, object2objectarraymap);
-        modelpart.setInitialPose(this.partPose);
-        modelpart.loadPose(this.partPose);
-        return modelpart;
+        List<Ducling.Wing> list = this.wings.stream().map(wing -> wing.bake(pTexWidth, pTexHeight)).collect(ImmutableList.toImmutableList());
+        Ducling ducling = new Ducling(list, object2objectarraymap);
+        ducling.setInitialPose(this.partPose);
+        ducling.loadPose(this.partPose);
+        return ducling;
     }
 
     @Override
-    public @NotNull PartDefinition getChild(@NotNull String pName) {
+    public @NotNull DuclingDefinition getChild(@NotNull String pName) {
         return this.children.get(pName);
     }
 }
