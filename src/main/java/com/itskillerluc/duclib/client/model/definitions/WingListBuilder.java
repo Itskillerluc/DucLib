@@ -24,12 +24,12 @@ public class WingListBuilder extends CubeListBuilder {
      */
     @Override
     public @NotNull WingListBuilder texOffs(int u, int v) {
-        this.advancedUV[0] = new AdvancedUV(Direction.NORTH, new UVPair(u, v), new UVPair(1, 1));
-        this.advancedUV[1] = new AdvancedUV(Direction.EAST, new UVPair(u, v), new UVPair(1, 1));
-        this.advancedUV[2] = new AdvancedUV(Direction.SOUTH, new UVPair(u, v), new UVPair(1, 1));
-        this.advancedUV[3] = new AdvancedUV(Direction.WEST, new UVPair(u, v), new UVPair(1, 1));
-        this.advancedUV[4] = new AdvancedUV(Direction.UP, new UVPair(u, v), new UVPair(1, 1));
-        this.advancedUV[5] = new AdvancedUV(Direction.DOWN, new UVPair(u, v), new UVPair(1, 1));
+        this.advancedUV[0] = new AdvancedUV(Direction.NORTH, new UVPair(u, v), null);
+        this.advancedUV[1] = new AdvancedUV(Direction.EAST, new UVPair(u, v), null);
+        this.advancedUV[2] = new AdvancedUV(Direction.SOUTH, new UVPair(u, v), null);
+        this.advancedUV[3] = new AdvancedUV(Direction.WEST, new UVPair(u, v), null);
+        this.advancedUV[4] = new AdvancedUV(Direction.UP, new UVPair(u, v), null);
+        this.advancedUV[5] = new AdvancedUV(Direction.DOWN, new UVPair(u, v), null);
         return this;
     }
 
@@ -59,9 +59,9 @@ public class WingListBuilder extends CubeListBuilder {
         return this;
     }
 
-    public WingListBuilder addBox(@NotNull String pComment, float pOriginX, float pOriginY, float pOriginZ, int pDimensionX, int pDimensionY, int pDimensionZ, CubeDeformation pCubeDeformation, AdvancedUV[] advancedUVS) {
+    public WingListBuilder addBox(String pComment, float pOriginX, float pOriginY, float pOriginZ, float pDimensionX, float pDimensionY, float pDimensionZ, CubeDeformation pCubeDeformation, AdvancedUV[] advancedUVS, boolean mirror) {
         this.texOffs(advancedUVS);
-        this.wings.add(new WingDefinition(pComment, advancedUVS, pOriginX, pOriginY, pOriginZ, (float)pDimensionX, (float)pDimensionY, (float)pDimensionZ, pCubeDeformation, this.mirror, 1.0F, 1.0F));
+        this.wings.add(new WingDefinition(pComment, advancedUVS, pOriginX, pOriginY, pOriginZ, pDimensionX, pDimensionY, pDimensionZ, pCubeDeformation, mirror, 1.0F, 1.0F));
         return this;
     }
 
@@ -69,6 +69,12 @@ public class WingListBuilder extends CubeListBuilder {
     public @NotNull WingListBuilder addBox(@NotNull String pComment, float pOriginX, float pOriginY, float pOriginZ, int pDimensionX, int pDimensionY, int pDimensionZ, int pXTexOffs, int pYTexOffs) {
         this.texOffs(pXTexOffs, pYTexOffs);
         this.wings.add(new WingDefinition(pComment, this.advancedUV, pOriginX, pOriginY, pOriginZ, (float)pDimensionX, (float)pDimensionY, (float)pDimensionZ, CubeDeformation.NONE, this.mirror, 1.0F, 1.0F));
+        return this;
+    }
+
+    public @NotNull WingListBuilder addBox(String pComment, float pOriginX, float pOriginY, float pOriginZ, float pDimensionX, float pDimensionY, float pDimensionZ, CubeDeformation deformation, int pXTexOffs, int pYTexOffs, boolean mirror) {
+        this.texOffs(pXTexOffs, pYTexOffs);
+        this.wings.add(new WingDefinition(pComment, this.advancedUV, pOriginX, pOriginY, pOriginZ, pDimensionX, pDimensionY, pDimensionZ, deformation, mirror, 1.0F, 1.0F));
         return this;
     }
 

@@ -1,6 +1,6 @@
 package com.itskillerluc.duclib.client.model.definitions;
 
-import net.minecraft.client.model.geom.ModelPart;
+import com.itskillerluc.duclib.client.model.Ducling;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +18,7 @@ public class LakeDefinition extends LayerDefinition {
     }
 
     @Override
-    public @NotNull ModelPart bakeRoot() {
+    public @NotNull Ducling bakeRoot() {
         return this.mesh.getRoot().bake(this.material.getXTexSize(), this.material.getYTexSize());
     }
 

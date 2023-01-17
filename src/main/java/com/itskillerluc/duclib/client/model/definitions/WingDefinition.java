@@ -4,6 +4,7 @@ import com.itskillerluc.duclib.client.model.Ducling;
 import net.minecraft.client.model.geom.builders.CubeDefinition;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.UVPair;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -29,7 +30,8 @@ public class WingDefinition extends CubeDefinition {
     }
 
     @Override
-    public Ducling.Wing bake(int pTexWidth, int pTexHeight) {
-        return new Ducling.Wing(this.featherUVs,this.origin.x(), this.origin.y(), this.origin.z(), this.dimensions.x(), this.dimensions.y(), this.dimensions.z(), this.grow.growX, this.grow.growY, this.grow.growZ, this.mirror, (float)pTexWidth * this.texScale.u(), (float)pTexHeight * this.texScale.v());
+    public Ducling.@NotNull Wing bake(int pTexWidth, int pTexHeight) {
+        return this.featherUVs[0].uvSize() != null ? new Ducling.Wing(this.featherUVs,this.origin.x(), this.origin.y(), this.origin.z(), this.dimensions.x(), this.dimensions.y(), this.dimensions.z(), this.grow.growX, this.grow.growY, this.grow.growZ, this.mirror, (float)pTexWidth * this.texScale.u(), (float)pTexHeight * this.texScale.v()) :
+                new Ducling.Wing(((int) this.featherUVs[0].uv().u()), ((int) this.featherUVs[0].uv().v()), this.origin.x(), this.origin.y(), this.origin.z(), this.dimensions.x(), this.dimensions.y(), this.dimensions.z(), this.grow.growX, this.grow.growY, this.grow.growZ, this.mirror, (float)pTexWidth * this.texScale.u(), (float)pTexHeight * this.texScale.v());
     }
 }
