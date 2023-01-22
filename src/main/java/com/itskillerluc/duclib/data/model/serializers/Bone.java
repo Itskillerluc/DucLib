@@ -1,11 +1,11 @@
-package com.itskillerluc.duclib.data.serializers;
+package com.itskillerluc.duclib.data.model.serializers;
 
 import com.google.gson.JsonParseException;
 
 import java.util.Objects;
 
 public record Bone(String name, String parent, float[] pivot, float[] rotation, Cube[] cubes) {
-    public Bone(String name, String parent, float[] pivot, float[] rotation, Cube[] cubes) {
+    public Bone(String name, String parent, float[] pivot, float[] rotation, com.itskillerluc.duclib.data.model.serializers.Cube[] cubes) {
         if (name == null) {
             throw new JsonParseException("couldn't find name field");
         }

@@ -1,10 +1,10 @@
-package com.itskillerluc.duclib.data;
+package com.itskillerluc.duclib.data.model;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.itskillerluc.duclib.data.serializers.GeometryHolder;
+import com.itskillerluc.duclib.data.model.serializers.GeometryHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -32,7 +32,7 @@ public class DucLibModelLoader extends SimpleJsonResourceReloadListener {
     }
 
     public DucLibModelLoader() {
-        super(GSON, "duclings");
+        super(GSON, "duclings/models");
     }
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> pObject, @NotNull ResourceManager pResourceManager, @NotNull ProfilerFiller pProfiler) {

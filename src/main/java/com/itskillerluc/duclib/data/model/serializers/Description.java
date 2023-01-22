@@ -1,4 +1,4 @@
-package com.itskillerluc.duclib.data.serializers;
+package com.itskillerluc.duclib.data.model.serializers;
 
 import com.google.gson.JsonParseException;
 

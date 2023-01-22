@@ -1,11 +1,11 @@
 package com.itskillerluc.duclib.client.model;
 
 import com.itskillerluc.duclib.client.model.definitions.*;
-import com.itskillerluc.duclib.data.DucLibModelLoader;
-import com.itskillerluc.duclib.data.serializers.Bone;
-import com.itskillerluc.duclib.data.serializers.Cube;
-import com.itskillerluc.duclib.data.serializers.Geometry;
-import com.itskillerluc.duclib.data.serializers.GeometryHolder;
+import com.itskillerluc.duclib.data.model.*;
+import com.itskillerluc.duclib.data.model.serializers.Bone;
+import com.itskillerluc.duclib.data.model.serializers.Cube;
+import com.itskillerluc.duclib.data.model.serializers.Geometry;
+import com.itskillerluc.duclib.data.model.serializers.GeometryHolder;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -28,7 +28,6 @@ public abstract class BaseDucModel extends Model {
     public BaseDucModel(Function<ResourceLocation, RenderType> pRenderType) {
         super(pRenderType);
     }
-
     public static LakeDefinition generateLakeDefinition(ResourceLocation entity){
         GeometryHolder holder = DucLibModelLoader.getModel(entity);
         Geometry geometry = holder.geometry()[0];

@@ -1,5 +1,6 @@
 package com.itskillerluc.duclib.client.model;
 
+import com.itskillerluc.duclib.client.animation.DucAnimation;
 import com.itskillerluc.duclib.client.model.definitions.LakeDefinition;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.resources.ResourceLocation;
@@ -25,6 +26,10 @@ abstract public class AnimatableDucModel <T extends Entity> extends Hierarchical
     }
 
     protected abstract ResourceLocation getModelLocation();
+
+    public DucAnimation getAnimation(){
+        return DucAnimation.create(getModelLocation());
+    }
 
     @Override
     public @NotNull Ducling root() {
