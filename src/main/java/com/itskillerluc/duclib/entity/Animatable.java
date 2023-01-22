@@ -17,8 +17,9 @@ interface Animatable <T extends AnimatableDucModel<?>> {
     }
 
     /**
-     * only use this for creating the lazy.
+     * @Deprecated Only use this to create the lazy that you pass in the {@link Animatable#getLazy()}
      */
+    @Deprecated
     default Map<String, AnimationState> animationSupplier(){
         Map<String, AnimationState> states = new HashMap<>();
         for (String s : getModel().getAnimation().getAnimations().keySet()) {
