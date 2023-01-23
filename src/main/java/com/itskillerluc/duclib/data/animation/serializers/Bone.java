@@ -17,26 +17,38 @@ public record Bone(Map<String, KeyFrame> rotation, Map<String, KeyFrame> positio
             Map<String, KeyFrame> scales = new HashMap<>();
 
             if (json.getAsJsonObject().get("rotation") != null) {
-                for (Map.Entry<String, JsonElement> rotation : json.getAsJsonObject().get("rotation").getAsJsonObject().asMap().entrySet()) {
-                    getKeyframes(rotations, rotation);
+                if (json.getAsJsonObject().get("rotation").isJsonObject()) {
+                    for (Map.Entry<String, JsonElement> rotation : json.getAsJsonObject().get("rotation").getAsJsonObject().asMap().entrySet()) {
+                        rotations.put(rotation.getKey(), createFrame(rotation));
+                    }
+                } else {
+                    rotations.put("0.0", new KeyFrame(new double[]{json.getAsJsonObject().get("rotation").getAsJsonArray().get(0).getAsDouble(), json.getAsJsonObject().get("rotation").getAsJsonArray().get(1).getAsDouble(), json.getAsJsonObject().get("rotation").getAsJsonArray().get(2).getAsDouble()}, "linear"));
                 }
             }
             if (json.getAsJsonObject().get("position") != null) {
-                for (Map.Entry<String, JsonElement> position : json.getAsJsonObject().get("position").getAsJsonObject().asMap().entrySet()) {
-                    getKeyframes(positions, position);
+                if (json.getAsJsonObject().get("position").isJsonObject()) {
+                    for (Map.Entry<String, JsonElement> position : json.getAsJsonObject().get("position").getAsJsonObject().asMap().entrySet()) {
+                        positions.put(position.getKey(), createFrame(position));
+                    }
+                } else {
+                    positions.put("0.0", new KeyFrame(new double[]{json.getAsJsonObject().get("position").getAsJsonArray().get(0).getAsDouble(), json.getAsJsonObject().get("position").getAsJsonArray().get(1).getAsDouble(), json.getAsJsonObject().get("position").getAsJsonArray().get(2).getAsDouble()}, "linear"));
                 }
             }
             if (json.getAsJsonObject().get("scale") != null) {
-                for (Map.Entry<String, JsonElement> scale : json.getAsJsonObject().get("scale").getAsJsonObject().asMap().entrySet()) {
-                    getKeyframes(scales, scale);
+                if (json.getAsJsonObject().get("scale").isJsonObject()) {
+                    for (Map.Entry<String, JsonElement> scale : json.getAsJsonObject().get("scale").getAsJsonObject().asMap().entrySet()) {
+                        scales.put(scale.getKey(), createFrame(scale));
+                    }
+                } else {
+                    scales.put("0.0", new KeyFrame(new double[]{json.getAsJsonObject().get("scale").getAsJsonArray().get(0).getAsDouble(), json.getAsJsonObject().get("scale").getAsJsonArray().get(1).getAsDouble(), json.getAsJsonObject().get("scale").getAsJsonArray().get(2).getAsDouble()}, "linear"));
                 }
             }
             return new Bone(rotations, positions, scales);
         }
 
-        private void getKeyframes(Map<String, KeyFrame> rotations, Map.Entry<String, JsonElement> rotation) {
-            rotations.put(rotation.getKey(), rotation.getValue().isJsonArray() ? new KeyFrame((rotation.getValue().getAsJsonArray().asList().stream().mapToDouble(JsonElement::getAsDouble).toArray()), "linear") :
-                    new KeyFrame(Optional.ofNullable(rotation.getValue().getAsJsonObject().get("vector")).orElse(rotation.getValue().getAsJsonObject().get("post")).getAsJsonArray().asList().stream().mapToDouble(JsonElement::getAsDouble).toArray(), rotation.getValue().getAsJsonObject().get("lerp_mode").getAsString()));
+        private KeyFrame createFrame(Map.Entry<String, JsonElement> element) {
+            return element.getValue().isJsonArray() ? new KeyFrame((element.getValue().getAsJsonArray().asList().stream().mapToDouble(JsonElement::getAsDouble).toArray()), "linear") :
+                    new KeyFrame(Optional.ofNullable(element.getValue().getAsJsonObject().get("vector")).orElse(element.getValue().getAsJsonObject().get("post")).getAsJsonArray().asList().stream().mapToDouble(JsonElement::getAsDouble).toArray(), element.getValue().getAsJsonObject().get("lerp_mode").getAsString());
         }
     }
 }

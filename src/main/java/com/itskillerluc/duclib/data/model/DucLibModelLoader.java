@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.itskillerluc.duclib.data.model.serializers.GeometryHolder;
+import com.itskillerluc.duclib.util.ClearableLazy;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * load the models into the game.
@@ -21,6 +23,7 @@ import java.util.Map;
 public class DucLibModelLoader extends SimpleJsonResourceReloadListener {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
     private static final Map<ResourceLocation, GeometryHolder> MODELS = new HashMap<>();
+    private static final ClearableLazy<Map<ResourceLocation, GeometryHolder>> OVERRIDES = ClearableLazy.of(() -> MODELS.entrySet().stream().filter(entry -> entry.getValue().override()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
 
     public static GeometryHolder getModel(ResourceLocation key){
         for (Map.Entry<ResourceLocation, GeometryHolder> resourceLocationGeometryHolderEntry : MODELS.entrySet()) {
@@ -29,6 +32,10 @@ public class DucLibModelLoader extends SimpleJsonResourceReloadListener {
             }
         }
         return null;
+    }
+
+    public static Map<ResourceLocation, GeometryHolder> getOverrides(){
+        return OVERRIDES.get();
     }
 
     public DucLibModelLoader() {
@@ -40,5 +47,6 @@ public class DucLibModelLoader extends SimpleJsonResourceReloadListener {
             GeometryHolder holder = GsonHelper.fromJson(GSON, resourceLocationJsonElementEntry.getValue().toString(), GeometryHolder.class);
             MODELS.put(resourceLocationJsonElementEntry.getKey(), holder);
         }
+        OVERRIDES.invalidate();
     }
 }

@@ -26,15 +26,15 @@ public abstract class DucAnimation {
                 List<Keyframe> scales = new ArrayList<>();
                 for (int i = 0; i < bones.getValue().position().entrySet().size(); i++) {
                     List<Map.Entry<String, KeyFrame>> entries = bones.getValue().position().entrySet().stream().toList();
-                    scales.add(createKeyFrames(positions, i, entries));
+                    positions.add(createKeyFrame(i, entries));
                 }
                 for (int i = 0; i < bones.getValue().rotation().entrySet().size(); i++) {
                     List<Map.Entry<String, KeyFrame>> entries = bones.getValue().rotation().entrySet().stream().toList();
-                    scales.add(createKeyFrames(rotations, i, entries));
+                    rotations.add(createKeyFrame(i, entries));
                 }
                 for (int i = 0; i < bones.getValue().scale().entrySet().size(); i++) {
                     List<Map.Entry<String, KeyFrame>> entries = bones.getValue().scale().entrySet().stream().toList();
-                    scales.add(createKeyFrames(scales, i, entries));
+                    scales.add(createKeyFrame(i, entries));
                 }
                 AnimationChannel positionChannel = new AnimationChannel(AnimationChannel.Targets.POSITION, positions.toArray(new Keyframe[0]));
                 AnimationChannel rotationChannel = new AnimationChannel(AnimationChannel.Targets.ROTATION, rotations.toArray(new Keyframe[0]));
@@ -50,13 +50,13 @@ public abstract class DucAnimation {
         return holderMap;
     }
 
-    private Keyframe createKeyFrames(List<Keyframe> frames, int i, List<Map.Entry<String, KeyFrame>> entries) {
+    private static Keyframe createKeyFrame(int i, List<Map.Entry<String, KeyFrame>> entries) {
         return new Keyframe(Float.parseFloat(entries.get(i).getKey()),
                 new Vector3f(((float) entries.get(i).getValue().vector()[0]), ((float) entries.get(i).getValue().vector()[1]), ((float) entries.get(i).getValue().vector()[2])),
                 entries.get(i).getValue().lerpMode().equals("catmullrom") ? AnimationChannel.Interpolations.CATMULLROM : AnimationChannel.Interpolations.LINEAR);
     }
 
-    public Map<String, AnimationHolder> getAnimations(){
+    public final Map<String, AnimationHolder> getAnimations(){
         return ANIMATIONS.get();
     }
 
