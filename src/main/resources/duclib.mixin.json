@@ -3,7 +3,8 @@
   "package" : "com.itskillerluc.duclib.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins" : [
-    "LayerDefinitionsMixin"
+    "LayerDefinitionsMixin",
+    "SimpleReloadInstanceMixin"
   ],
   "Injectors": {
     "defaultRequire" : 1

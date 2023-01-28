@@ -23,22 +23,14 @@ import java.util.function.Function;
  */
 abstract public class AnimatableDucModel <T extends Entity & Animatable<?>> extends HierarchicalModel<T> {
     Ducling root;
-    Map<String, Ducling> duclings;
 
     public AnimatableDucModel(Ducling ducling, Function<ResourceLocation, RenderType> renderType) {
         super(renderType);
         this.root = ducling.getChild("root");
     }
 
-    public LakeDefinition getLakeDefinition(){
-        return BaseDucModel.generateLakeDefinition(getModelLocation());
-    }
-
-    protected abstract ResourceLocation getModelLocation();
-
     @Override
     public @NotNull Ducling root() {
-        Ducling root = duclings.get("root");
         if(root == null){
             throw new NullPointerException("model does not contain a root.");
         }

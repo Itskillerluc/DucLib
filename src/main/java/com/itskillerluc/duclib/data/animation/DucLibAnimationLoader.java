@@ -41,7 +41,7 @@ public class DucLibAnimationLoader extends SimpleJsonResourceReloadListener {
     protected void apply(Map<ResourceLocation, JsonElement> pObject, @NotNull ResourceManager pResourceManager, @NotNull ProfilerFiller pProfiler) {
         for (Map.Entry<ResourceLocation, JsonElement> resourceLocationJsonElementEntry : pObject.entrySet()) {
             AnimationHolder holder = GsonHelper.fromJson(GSON, resourceLocationJsonElementEntry.getValue().toString(), AnimationHolder.class);
-            ANIMATIONS.put(resourceLocationJsonElementEntry.getKey(), holder);
+            ANIMATIONS.put(new ResourceLocation(resourceLocationJsonElementEntry.getKey().getNamespace(), resourceLocationJsonElementEntry.getKey().getPath().replace(".animation", "")), holder);
         }
     }
 }

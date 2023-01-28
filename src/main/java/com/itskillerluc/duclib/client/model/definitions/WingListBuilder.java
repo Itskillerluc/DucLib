@@ -20,16 +20,18 @@ public class WingListBuilder extends CubeListBuilder {
     private boolean mirror;
 
     /**
-     *use the one below instead unless you absolutely cant. this one will mess with the texture tho so i dont recommend using it at all.
+     *use the one below instead unless you absolutely cant. this one will mess with the texture tho, so I don't recommend using it at all.
      */
     @Override
     public @NotNull WingListBuilder texOffs(int u, int v) {
-        this.advancedUV[0] = new AdvancedUV(Direction.NORTH, new UVPair(u, v), null);
-        this.advancedUV[1] = new AdvancedUV(Direction.EAST, new UVPair(u, v), null);
-        this.advancedUV[2] = new AdvancedUV(Direction.SOUTH, new UVPair(u, v), null);
-        this.advancedUV[3] = new AdvancedUV(Direction.WEST, new UVPair(u, v), null);
-        this.advancedUV[4] = new AdvancedUV(Direction.UP, new UVPair(u, v), null);
-        this.advancedUV[5] = new AdvancedUV(Direction.DOWN, new UVPair(u, v), null);
+        this.advancedUV = new AdvancedUV[]{
+                new AdvancedUV(Direction.NORTH, new UVPair(u, v), null),
+                new AdvancedUV(Direction.EAST, new UVPair(u, v), null),
+                new AdvancedUV(Direction.SOUTH, new UVPair(u, v), null),
+                new AdvancedUV(Direction.WEST, new UVPair(u, v), null),
+                new AdvancedUV(Direction.UP, new UVPair(u, v), null),
+                new AdvancedUV(Direction.DOWN, new UVPair(u, v), null)
+        };
         return this;
     }
 

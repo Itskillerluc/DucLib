@@ -27,7 +27,7 @@ displayName="DucLib" #mandatory
 # A URL for the "homepage" for this mod, displayed in the mod UI
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
-logoFile="examplemod.png" #optional
+logoFile="duclib.png" #optional
 # A text field displayed in the mod UI
 credits="This mod was initially created for ark reseeded" #optional
 # A text field displayed in the mod UI
@@ -45,7 +45,7 @@ description='''
 A lightweight library mod for using bedrock models with the new 1.19 keyframe animation.
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.examplemod]] #optional
+[[dependencies.duclib]] #optional
     # the modid of the dependency
     modId="forge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
@@ -57,7 +57,7 @@ A lightweight library mod for using bedrock models with the new 1.19 keyframe an
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
 # Here's another dependency
-[[dependencies.examplemod]]
+[[dependencies.duclib]]
     modId="minecraft"
     mandatory=true
 # This version range declares a minimum of the current minecraft version up to but not including the next major version
