@@ -39,8 +39,16 @@ public abstract class DucAnimation {
                 AnimationChannel positionChannel = new AnimationChannel(AnimationChannel.Targets.POSITION, positions.toArray(new Keyframe[0]));
                 AnimationChannel rotationChannel = new AnimationChannel(AnimationChannel.Targets.ROTATION, rotations.toArray(new Keyframe[0]));
                 AnimationChannel scaleChannel = new AnimationChannel(AnimationChannel.Targets.SCALE, scales.toArray(new Keyframe[0]));
+                if (positionChannel.keyframes().length > 0){
+                    builder.addAnimation(bones.getKey(), positionChannel);
+                }
+                if (rotationChannel.keyframes().length > 0){
+                    builder.addAnimation(bones.getKey(), rotationChannel);
+                }
+                if (scaleChannel.keyframes().length > 0){
+                    builder.addAnimation(bones.getKey(), scaleChannel);
 
-                builder.addAnimation(bones.getKey(), positionChannel).addAnimation(bones.getKey(), rotationChannel).addAnimation(bones.getKey(), scaleChannel);
+                }
             }
             if (stringAnimationEntry.getValue().loop()){
                 builder.looping();

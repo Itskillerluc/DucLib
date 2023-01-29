@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
-@Debug(export = true)
 @Mixin(SimpleReloadInstance.class)
 public abstract class SimpleReloadInstanceMixin implements ReloadInstance {
 

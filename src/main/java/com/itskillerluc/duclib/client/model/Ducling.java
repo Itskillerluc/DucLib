@@ -317,12 +317,12 @@ public final class Ducling extends ModelPart{
 
             Map<Direction, AdvancedUV> featherUVMap = Arrays.stream(featherUVs).collect(Collectors.toMap(AdvancedUV::direction, value -> value));
 
-            this.feathers[2] = new Feather(new Barb[]{ducling$barb4, ducling$barb3, ducling$barb7, ducling$barb}, featherUVMap.get(Direction.DOWN).uv().u(), featherUVMap.get(Direction.DOWN).uv().v(), featherUVMap.get(Direction.DOWN).uv().u() + featherUVMap.get(Direction.DOWN).uvSize().u(), featherUVMap.get(Direction.DOWN).uv().v() + featherUVMap.get(Direction.DOWN).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.DOWN);
-            this.feathers[3] = new Feather(new Barb[]{ducling$barb1, ducling$barb2, ducling$barb6, ducling$barb5}, featherUVMap.get(Direction.UP).uv().u(), featherUVMap.get(Direction.UP).uv().v(), featherUVMap.get(Direction.UP).uv().u() + featherUVMap.get(Direction.UP).uvSize().u(), featherUVMap.get(Direction.UP).uv().v() + featherUVMap.get(Direction.UP).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.UP);
-            this.feathers[1] = new Feather(new Barb[]{ducling$barb7, ducling$barb3, ducling$barb6, ducling$barb2}, featherUVMap.get(Direction.WEST).uv().u(), featherUVMap.get(Direction.WEST).uv().v(), featherUVMap.get(Direction.WEST).uv().u() + featherUVMap.get(Direction.WEST).uvSize().u(), featherUVMap.get(Direction.WEST).uv().v() + featherUVMap.get(Direction.WEST).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.WEST);
-            this.feathers[4] = new Feather(new Barb[]{ducling$barb, ducling$barb7, ducling$barb2, ducling$barb1}, featherUVMap.get(Direction.SOUTH).uv().u(), featherUVMap.get(Direction.SOUTH).uv().v(), featherUVMap.get(Direction.SOUTH).uv().u() + featherUVMap.get(Direction.SOUTH).uvSize().u(), featherUVMap.get(Direction.SOUTH).uv().v() + featherUVMap.get(Direction.SOUTH).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.NORTH);
-            this.feathers[0] = new Feather(new Barb[]{ducling$barb4, ducling$barb, ducling$barb1, ducling$barb5}, featherUVMap.get(Direction.EAST).uv().u(), featherUVMap.get(Direction.EAST).uv().v(), featherUVMap.get(Direction.EAST).uv().u() + featherUVMap.get(Direction.EAST).uvSize().u(), featherUVMap.get(Direction.EAST).uv().v() + featherUVMap.get(Direction.EAST).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.EAST);
-            this.feathers[5] = new Feather(new Barb[]{ducling$barb3, ducling$barb4, ducling$barb5, ducling$barb6}, featherUVMap.get(Direction.NORTH).uv().u(), featherUVMap.get(Direction.NORTH).uv().v(), featherUVMap.get(Direction.NORTH).uv().u() + featherUVMap.get(Direction.NORTH).uvSize().u(), featherUVMap.get(Direction.NORTH).uv().v() + featherUVMap.get(Direction.NORTH).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.SOUTH);
+            this.feathers[2] = new Feather(new Barb[]{ducling$barb4, ducling$barb3, ducling$barb7, ducling$barb}, featherUVMap.get(Direction.UP).uv().u(), featherUVMap.get(Direction.UP).uv().v(), featherUVMap.get(Direction.UP).uv().u() + featherUVMap.get(Direction.UP).uvSize().u(), featherUVMap.get(Direction.UP).uv().v() + featherUVMap.get(Direction.UP).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.DOWN);
+            this.feathers[3] = new Feather(new Barb[]{ducling$barb1, ducling$barb2, ducling$barb6, ducling$barb5}, featherUVMap.get(Direction.DOWN).uv().u(), featherUVMap.get(Direction.DOWN).uv().v(), featherUVMap.get(Direction.DOWN).uv().u() + featherUVMap.get(Direction.DOWN).uvSize().u(), featherUVMap.get(Direction.DOWN).uv().v() + featherUVMap.get(Direction.DOWN).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.UP);
+            this.feathers[1] = new Feather(new Barb[]{ducling$barb7, ducling$barb3, ducling$barb6, ducling$barb2}, featherUVMap.get(Direction.EAST).uv().u(), featherUVMap.get(Direction.EAST).uv().v(), featherUVMap.get(Direction.EAST).uv().u() + featherUVMap.get(Direction.EAST).uvSize().u(), featherUVMap.get(Direction.EAST).uv().v() + featherUVMap.get(Direction.EAST).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.EAST);
+            this.feathers[4] = new Feather(new Barb[]{ducling$barb, ducling$barb7, ducling$barb2, ducling$barb1}, featherUVMap.get(Direction.NORTH).uv().u(), featherUVMap.get(Direction.NORTH).uv().v(), featherUVMap.get(Direction.NORTH).uv().u() + featherUVMap.get(Direction.NORTH).uvSize().u(), featherUVMap.get(Direction.NORTH).uv().v() + featherUVMap.get(Direction.NORTH).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.NORTH);
+            this.feathers[0] = new Feather(new Barb[]{ducling$barb4, ducling$barb, ducling$barb1, ducling$barb5}, featherUVMap.get(Direction.WEST).uv().u(), featherUVMap.get(Direction.WEST).uv().v(), featherUVMap.get(Direction.WEST).uv().u() + featherUVMap.get(Direction.WEST).uvSize().u(), featherUVMap.get(Direction.WEST).uv().v() + featherUVMap.get(Direction.WEST).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.WEST);
+            this.feathers[5] = new Feather(new Barb[]{ducling$barb3, ducling$barb4, ducling$barb5, ducling$barb6}, featherUVMap.get(Direction.SOUTH).uv().u(), featherUVMap.get(Direction.SOUTH).uv().v(), featherUVMap.get(Direction.SOUTH).uv().u() + featherUVMap.get(Direction.SOUTH).uvSize().u(), featherUVMap.get(Direction.SOUTH).uv().v() + featherUVMap.get(Direction.SOUTH).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.SOUTH);
         }
 
         public Wing(int pTexCoordU, int pTexCoordV, float pMinX, float pMinY, float pMinZ, float pDimensionX, float pDimensionY, float pDimensionZ, float pGrowX, float pGrowY, float pGrowZ, boolean pMirror, float pTexWidthScaled, float pTexHeightScaled) {
@@ -368,6 +368,7 @@ public final class Ducling extends ModelPart{
             float f10 = (float)pTexCoordV;
             float f11 = (float)pTexCoordV + pDimensionZ;
             float f12 = (float)pTexCoordV + pDimensionZ + pDimensionY;
+            
             this.feathers[2] = new Ducling.Feather(new Ducling.Barb[]{ducling$barb4, ducling$barb3, ducling$barb7, ducling$barb}, f5, f10, f6, f11, pTexWidthScaled, pTexHeightScaled, pMirror, Direction.DOWN);
             this.feathers[3] = new Ducling.Feather(new Ducling.Barb[]{ducling$barb1, ducling$barb2, ducling$barb6, ducling$barb5}, f6, f11, f7, f10, pTexWidthScaled, pTexHeightScaled, pMirror, Direction.UP);
             this.feathers[1] = new Ducling.Feather(new Ducling.Barb[]{ducling$barb7, ducling$barb3, ducling$barb6, ducling$barb2}, f4, f11, f5, f12, pTexWidthScaled, pTexHeightScaled, pMirror, Direction.WEST);
@@ -419,7 +420,7 @@ public final class Ducling extends ModelPart{
             pVertices[1] = pVertices[1].remap(x1 / textureWidth, y1 / textureHeight);
             pVertices[2] = pVertices[2].remap(x1 / textureWidth, y2 / textureHeight);
             pVertices[3] = pVertices[3].remap(x2 / textureWidth, y2 / textureHeight);
-            if (mirror) {
+            if (!mirror) {
                 int i = pVertices.length;
 
                 for(int j = 0; j < i / 2; ++j) {
@@ -430,7 +431,7 @@ public final class Ducling extends ModelPart{
             }
 
             this.normal = pDirection.step();
-            if (mirror) {
+            if (!mirror) {
                 this.normal.mul(-1.0F, 1.0F, 1.0F);
             }
 

@@ -13,8 +13,4 @@ public record Geometry(Description description, Bone[] bones) {
             throw new JsonParseException("couldn't find bones field");
         }
     }
-
-    public boolean hasRoot(){
-        return Arrays.stream(bones).anyMatch(bone -> bone.name().equals("root"));
-    }
 }
