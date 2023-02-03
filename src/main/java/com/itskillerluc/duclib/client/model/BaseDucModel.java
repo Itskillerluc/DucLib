@@ -55,7 +55,8 @@ public abstract class BaseDucModel extends Model {
                 if (bone.cubes() != null) {
                     for (Cube cube : bone.cubes()) {
                         if (cube.rotation() != null) {
-                                parentDef.addOrReplaceChild("cube_" + count, createWings(new Bone("cube_" + count, bone.name(), new float[]{}, null, new Cube[]{new Cube(cube.origin(), cube.size(), null, null, cube.inflate(), cube.uv(), cube.mirror())}), new float[]{cube.pivot()[0], cube.pivot()[1], cube.pivot()[2]}, boxUV), PartPose.offsetAndRotation(cube.pivot()[0] - bone.pivot()[0], bone.pivot()[1] - cube.pivot()[1], cube.pivot()[2] - bone.pivot()[2], Mth.DEG_TO_RAD * cube.rotation()[0], Mth.DEG_TO_RAD * cube.rotation()[1], Mth.DEG_TO_RAD * cube.rotation()[2]));
+                            parentDef.addOrReplaceChild("cube_" + count, createWings(new Bone("cube_" + count, bone.name(), new float[]{}, null, new Cube[]{new Cube(cube.origin(), cube.size(), null, null, cube.inflate(), cube.uv(), cube.mirror())}), new float[]{cube.pivot()[0], cube.pivot()[1], cube.pivot()[2]}, boxUV), PartPose.offsetAndRotation(cube.pivot()[0] - bone.pivot()[0], bone.pivot()[1] - cube.pivot()[1], cube.pivot()[2] - bone.pivot()[2], Mth.DEG_TO_RAD * cube.rotation()[0], Mth.DEG_TO_RAD * cube.rotation()[1], Mth.DEG_TO_RAD * cube.rotation()[2]));
+                            count++;
                         }
                     }
                 }

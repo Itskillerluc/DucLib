@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.itskillerluc.duclib.data.animation.serializers.AnimationHolder;
 import com.itskillerluc.duclib.data.animation.serializers.Bone;
+import com.itskillerluc.duclib.data.animation.serializers.KeyFrame;
 import com.itskillerluc.duclib.data.model.serializers.GeometryHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -21,7 +22,7 @@ import java.util.Map;
  * load the animations into the game.
  */
 public class DucLibAnimationLoader extends SimpleJsonResourceReloadListener {
-    private static final Gson GSON = new GsonBuilder().registerTypeAdapter(Bone.class, new Bone.adapter()).setPrettyPrinting().disableHtmlEscaping().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
+    public static final Gson GSON = new GsonBuilder().registerTypeAdapter(Bone.class, new Bone.adapter()).setPrettyPrinting().disableHtmlEscaping().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
     private static final Map<ResourceLocation, AnimationHolder> ANIMATIONS = new HashMap<>();
 
     public static AnimationHolder getAnimation(ResourceLocation key){

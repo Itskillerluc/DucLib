@@ -226,6 +226,7 @@ public class WyvernEntity extends Animal implements FlyingAnimal, Animatable<Wyv
     @Override
     public void tick() {
         super.tick();
+        playAnimation("idle", tickCount);
         /*
         if (getPose() == Pose.STANDING && !isFlying() && Animatable.isMoving(this)){
             playAnimation("walk", tickCount);
