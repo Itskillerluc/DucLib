@@ -50,6 +50,7 @@ public class WyvernEntity extends Animal implements FlyingAnimal, Animatable<Wyv
     public WyvernEntity(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new FlyingMoveControl(this, 10, true);
+
     }
 
     @Override
@@ -226,28 +227,12 @@ public class WyvernEntity extends Animal implements FlyingAnimal, Animatable<Wyv
     @Override
     public void tick() {
         super.tick();
-        playAnimation("idle", tickCount);
-        /*
-        if (getPose() == Pose.STANDING && !isFlying() && Animatable.isMoving(this)){
-            playAnimation("walk", tickCount);
-        } else {
-            stopAnimation("walk");
-        }
-        if (getPose() == Pose.STANDING && isFlying() && Animatable.isMoving(this)){
-            playAnimation("fly", tickCount);
-        } else {
-            stopAnimation("fly");
-        }
-        if (getPose() == Pose.STANDING && !isFlying() && !Animatable.isMoving(this)){
-            playAnimation("idle", tickCount);
-        } else {
-            stopAnimation("idle");
-        }
-        if (getPose() == Pose.STANDING && isFlying() && !Animatable.isMoving(this)){
-            playAnimation("idle_fly", tickCount);
-        } else {
-            stopAnimation("idle_fly");
-        }*/
+//        if (level.isClientSide()) {
+//            animateWhen("walk", getPose() == Pose.STANDING && !isFlying() && Animatable.isMoving(this), tickCount);
+//            animateWhen("fly", getPose() == Pose.STANDING && isFlying() && Animatable.isMoving(this), tickCount);
+//            animateWhen("idle", getPose() == Pose.STANDING && !isFlying() && !Animatable.isMoving(this), tickCount);
+//            animateWhen("idle_fly", getPose() == Pose.STANDING && isFlying() && !Animatable.isMoving(this), tickCount);
+//        }
     }
 
     @Override

@@ -9,15 +9,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Lazy;
 import org.jetbrains.annotations.NotNull;
 import org.joml.*;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Duclings are the DucLib equivalent of the vanilla ModelParts.
@@ -39,6 +36,8 @@ public final class Ducling extends ModelPart{
     private final List<Wing> wings;
     private final Map<String, Ducling> children;
     private PartPose initialPose = PartPose.ZERO;
+
+    private final Lazy<Map<String, Ducling>> duclings = Lazy.of(this::getAllDuclings);
 
     public Ducling(List<Wing> pWings, Map<String, Ducling> pChildren) {
         super((List<Cube>)(List<?>) pWings, (Map<String, ModelPart>) (Map<String, ?>) pChildren);
@@ -119,7 +118,13 @@ public final class Ducling extends ModelPart{
 
     @Override
     public @NotNull Ducling getChild(@NotNull String pName) {
-        Ducling ducling = this.children.get(pName);
+        //FIXME
+        Ducling ducling;
+        if (pName.equals("dl_top_root")){
+            ducling = this.children.get(pName);
+        } else {
+            ducling = this.children.get(pName);
+        }
         if (ducling == null) {
             throw new NoSuchElementException("Can't find part " + pName);
         } else {
@@ -251,8 +256,16 @@ public final class Ducling extends ModelPart{
         this.zScale += offset.z();
     }
 
-    public Stream<Ducling> getAllDuclings() {
-        return Stream.concat(Stream.of(this), this.children.values().stream().flatMap(Ducling::getAllDuclings));
+    private Map<String, Ducling> getAllDuclings() {
+        return getDuclingsRecursively(new HashMap<>(), this);
+    }
+
+    private Map<String, Ducling> getDuclingsRecursively(Map<String, Ducling> parent, Ducling ducling){
+        for (Map.Entry<String, Ducling> stringDuclingEntry : ducling.children.entrySet()) {
+            parent.put(stringDuclingEntry.getKey(), stringDuclingEntry.getValue());
+            stringDuclingEntry.getValue().getDuclingsRecursively(parent, stringDuclingEntry.getValue());
+        }
+        return parent;
     }
 
     @OnlyIn(Dist.CLIENT)

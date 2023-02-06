@@ -18,7 +18,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * use this if you don't need animations for your entity.
+ * use this if you don't need animations for your entity, and it just has to render all the cubes.
  */
 public class DucRenderer <T extends Entity, M extends BaseDucModel> extends EntityRenderer<T> {
     private final Function<T, ResourceLocation> textureLocation;

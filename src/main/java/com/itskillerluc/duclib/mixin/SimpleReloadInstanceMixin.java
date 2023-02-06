@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
+/**
+ * This changes the order of the game loading so that the DucLib loaders fire before the models are baked.
+ */
 @Mixin(SimpleReloadInstance.class)
 public abstract class SimpleReloadInstanceMixin implements ReloadInstance {
 

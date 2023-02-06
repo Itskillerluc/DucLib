@@ -8,6 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
+/**
+ * DucLib version of CubeDefinition
+ */
 public class WingDefinition extends CubeDefinition {
     @javax.annotation.Nullable
     private final String comment;
@@ -29,6 +32,12 @@ public class WingDefinition extends CubeDefinition {
         this.texScale = new UVPair(pTexScaleU, pTexScaleV);
     }
 
+    /**
+     * Bakes teh WingDefinition into an actual wing.
+     * @param pTexWidth texture width
+     * @param pTexHeight texture height
+     * @return the baked Ducling wing.
+     */
     @Override
     public Ducling.@NotNull Wing bake(int pTexWidth, int pTexHeight) {
         return this.featherUVs[0].uvSize() != null ? new Ducling.Wing(this.featherUVs,this.origin.x(), this.origin.y(), this.origin.z(), this.dimensions.x(), this.dimensions.y(), this.dimensions.z(), this.grow.growX, this.grow.growY, this.grow.growZ, this.mirror, (float)pTexWidth * this.texScale.u(), (float)pTexHeight * this.texScale.v()) :

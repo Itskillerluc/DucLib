@@ -1,6 +1,5 @@
 package com.itskillerluc.duclib.mixin;
 
-import com.itskillerluc.duclib.client.model.BaseDucModel;
 import com.itskillerluc.duclib.client.model.definitions.*;
 import com.itskillerluc.duclib.data.model.DucLibModelLoader;
 import com.itskillerluc.duclib.data.model.serializers.Bone;
@@ -24,6 +23,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Mixin for handling the replacing of models.
+ */
 @Mixin(LayerDefinitions.class)
 public class LayerDefinitionsMixin {
     @Inject(method = "Lnet/minecraft/client/model/geom/LayerDefinitions;createRoots()Ljava/util/Map;",at = @At("TAIL"), cancellable = true)

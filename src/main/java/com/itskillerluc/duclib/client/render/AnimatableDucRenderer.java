@@ -11,6 +11,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * Doesn't really serve a use as of right-now, but it might in the future, so preferably use it when you can.
+ */
 public class AnimatableDucRenderer<T extends LivingEntity & Animatable<M>, M extends AnimatableDucModel<T>> extends LivingEntityRenderer<T, M> {
     private final Function<T, ResourceLocation> textureFunction;
 

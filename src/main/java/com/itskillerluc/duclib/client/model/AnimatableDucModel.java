@@ -5,6 +5,7 @@ import com.itskillerluc.duclib.client.animation.DucAnimation;
 import com.itskillerluc.duclib.client.model.definitions.LakeDefinition;
 import com.itskillerluc.duclib.entity.Animatable;
 import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.AnimationState;
@@ -21,7 +22,7 @@ import java.util.function.Function;
  * Create the animation in here and specify the model.
  * just use this one, it's the best, and you can't animate the others.
  */
-abstract public class AnimatableDucModel <T extends Entity & Animatable<?>> extends HierarchicalModel<T> {
+public class AnimatableDucModel <T extends Entity & Animatable<?>> extends HierarchicalModel<T> {
     Ducling root;
 
     public AnimatableDucModel(Ducling ducling, Function<ResourceLocation, RenderType> renderType) {
@@ -29,6 +30,9 @@ abstract public class AnimatableDucModel <T extends Entity & Animatable<?>> exte
         this.root = ducling.getChild("dl_top_root");
     }
 
+    /**
+     * @return the root Ducling
+     */
     @Override
     public @NotNull Ducling root() {
         if(root == null){
@@ -37,11 +41,19 @@ abstract public class AnimatableDucModel <T extends Entity & Animatable<?>> exte
         return root;
     }
 
+    /**
+     * Override this and return any animation keys of animations you don't want to be automatically registered.
+     */
     protected Set<String> excludeAnimations(){
         return Collections.emptySet();
     }
+
+    /**
+     * Automatically register the animations
+     */
     @Override
     public void setupAnim(@NotNull T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+        this.root().getAllParts().forEach(ModelPart::resetPose);
         for (Map.Entry<String, AnimationState> stringAnimationStateEntry : pEntity.getAnimations().get().entrySet()) {
             if (!excludeAnimations().contains(stringAnimationStateEntry.getKey())) {
                 AnimationHolder animation = pEntity.getAnimation().getAnimations().get(stringAnimationStateEntry.getKey());
@@ -50,6 +62,11 @@ abstract public class AnimatableDucModel <T extends Entity & Animatable<?>> exte
         }
     }
 
+    /**
+     * Create a map of the animation states automatically.
+     * @param animation The animation
+     * @return a map of animation states and keys.
+     */
     public static Map<String, AnimationState> createStateMap(DucAnimation animation){
         Map<String, AnimationState> states = new HashMap<>();
         for (String key : animation.getAnimations().keySet()) {

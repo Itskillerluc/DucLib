@@ -48,6 +48,12 @@ public class DuclingDefinition extends PartDefinition {
         return duclingDefinition;
     }
 
+    /**
+     * Bake the DuclingDefinition into a Ducling, roasted Duc, yum.
+     * @param pTexWidth texture width
+     * @param pTexHeight texture height
+     * @return the baked Ducling
+     */
     @Override
     public @NotNull Ducling bake(int pTexWidth, int pTexHeight) {
         Object2ObjectArrayMap<String, Ducling> object2objectarraymap = this.children.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, (p_171593_) -> p_171593_.getValue().bake(pTexWidth, pTexHeight), (p_171595_, p_171596_) -> p_171595_, Object2ObjectArrayMap::new));
@@ -58,6 +64,11 @@ public class DuclingDefinition extends PartDefinition {
         return ducling;
     }
 
+    /**
+     * gets a child with a key.
+     * @param pName name of the child
+     * @return the child with the corresponding name.
+     */
     @Override
     public @NotNull DuclingDefinition getChild(@NotNull String pName) {
         return this.children.get(pName);

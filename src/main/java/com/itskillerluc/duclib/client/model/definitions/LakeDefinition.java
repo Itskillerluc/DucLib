@@ -17,11 +17,21 @@ public class LakeDefinition extends LayerDefinition {
         this.material = pMaterial;
     }
 
+    /**
+     * @return The baked Lake definition.
+     */
     @Override
     public @NotNull Ducling bakeRoot() {
         return this.mesh.getRoot().bake(this.material.getXTexSize(), this.material.getYTexSize());
     }
 
+    /**
+     * Static factory method for LakeDefinition.
+     * @param pMesh The Definition containing all the DuclingDefinitions.
+     * @param pTexWidth texture width
+     * @param pTexHeight texture height
+     * @return a new instance of a LakeDefinition.
+     */
     public static LakeDefinition create(PondDefinition pMesh, int pTexWidth, int pTexHeight) {
         return new LakeDefinition(pMesh, new FeatherMaterialDefinition(pTexWidth, pTexHeight));
     }

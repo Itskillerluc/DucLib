@@ -28,6 +28,12 @@ public abstract class BaseDucModel extends Model {
     public BaseDucModel(Function<ResourceLocation, RenderType> pRenderType) {
         super(pRenderType);
     }
+
+    /**
+     * internal method to generate the lake definition
+     * @param entity entity for the model.
+     * @return a new LakeDefinition generated from the json file
+     */
     static LakeDefinition generateLakeDefinition(ResourceLocation entity){
         GeometryHolder holder = DucLibModelLoader.getModel(entity);
         Geometry geometry = holder.geometry()[0];
@@ -48,6 +54,9 @@ public abstract class BaseDucModel extends Model {
         return LakeDefinition.create(pondDefinition, geometry.description().textureWidth(), geometry.description().textureHeight());
     }
 
+    /**
+     * helper method for generating a DuclingDefinition from a json file
+     */
     private static DuclingDefinition generateLakeDefinitionRecursively(String parent, int count, List<Bone> bones, DuclingDefinition parentDucling, float[] offset, boolean boxUV){
         for (Bone bone : bones) {
             if (bone.parent().equals(parent)){
@@ -66,6 +75,9 @@ public abstract class BaseDucModel extends Model {
         return parentDucling;
     }
 
+    /**
+     * Deserialize all the wings from the json file to java code.
+     */
     private static WingListBuilder createWings(Bone bone, float[] offset, boolean boxUV){
         WingListBuilder builder = WingListBuilder.create();
         if (bone.cubes() != null) {
@@ -93,6 +105,11 @@ public abstract class BaseDucModel extends Model {
         return builder;
     }
 
+    /**
+     * Use this to create a LakeDefinition generated from a model file.
+     * @param location The entity Model location
+     * @return a LakeDefinition generated from the model json file.
+     */
     public static LakeDefinition getLakeDefinition(ResourceLocation location){
         return BaseDucModel.generateLakeDefinition(location);
     }
