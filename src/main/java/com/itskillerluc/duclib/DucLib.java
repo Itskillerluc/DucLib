@@ -2,7 +2,6 @@ package com.itskillerluc.duclib;
 
 import com.itskillerluc.duclib.data.animation.DucLibAnimationLoader;
 import com.itskillerluc.duclib.data.model.DucLibModelLoader;
-import com.itskillerluc.duclib.test.entities.ModEntities;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -21,8 +20,6 @@ public class DucLib
     public DucLib()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
-        ModEntities.ENTITY_TYPES.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::addReloadListener);
