@@ -1,8 +1,8 @@
-package com.itskillerluc.duclib.test;
+package com.itskillerluc.duclib.example;
 
 import com.itskillerluc.duclib.DucLib;
-import com.itskillerluc.duclib.test.entities.ModEntities;
-import com.itskillerluc.duclib.test.entities.WyvernEntity;
+import com.itskillerluc.duclib.example.entities.ModEntities;
+import com.itskillerluc.duclib.example.entities.WyvernEntity;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

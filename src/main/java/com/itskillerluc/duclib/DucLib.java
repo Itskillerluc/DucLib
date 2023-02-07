@@ -2,7 +2,7 @@ package com.itskillerluc.duclib;
 
 import com.itskillerluc.duclib.data.animation.DucLibAnimationLoader;
 import com.itskillerluc.duclib.data.model.DucLibModelLoader;
-import com.itskillerluc.duclib.test.entities.ModEntities;
+import com.itskillerluc.duclib.example.entities.ModEntities;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.common.MinecraftForge;

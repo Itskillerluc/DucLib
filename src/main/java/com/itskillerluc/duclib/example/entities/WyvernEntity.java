@@ -1,9 +1,9 @@
-package com.itskillerluc.duclib.test.entities;
+package com.itskillerluc.duclib.example.entities;
 
 import com.itskillerluc.duclib.DucLib;
 import com.itskillerluc.duclib.client.animation.DucAnimation;
 import com.itskillerluc.duclib.entity.Animatable;
-import com.itskillerluc.duclib.test.client.WyvernModel;
+import com.itskillerluc.duclib.example.client.WyvernModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -38,44 +38,22 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 public class WyvernEntity extends Animal implements FlyingAnimal, Animatable<WyvernModel> {
-    private static final EntityDataAccessor<Boolean> ATTACKING = SynchedEntityData.defineId(WyvernEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> ASLEEP = SynchedEntityData.defineId(WyvernEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Integer> DATA_ID_TYPE_VARIANT = SynchedEntityData.defineId(WyvernEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> RISK = SynchedEntityData.defineId(WyvernEntity.class, EntityDataSerializers.INT);
-
+    /**
+     * animation resourceLocation
+     */
     public static final ResourceLocation LOCATION = new ResourceLocation(DucLib.MOD_ID, "test");
+    /**
+     * Create teh animation instance with the animation location.
+     */
     public static final DucAnimation ANIMATION = DucAnimation.create(LOCATION);
-    private Lazy<Map<String, AnimationState>> animations = Lazy.of(() -> WyvernModel.createStateMap(getAnimation()));
+    /**
+     * create a lazy version of the animations.
+     */
+    private final Lazy<Map<String, AnimationState>> animations = Lazy.of(() -> WyvernModel.createStateMap(getAnimation()));
 
     public WyvernEntity(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new FlyingMoveControl(this, 10, true);
-    }
-
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_ID_TYPE_VARIANT, 0);
-        this.entityData.define(ASLEEP, false);
-        this.entityData.define(ATTACKING, false);
-        this.entityData.define(RISK, 0);
-    }
-
-    public void setRisk(int risk){
-        this.entityData.set(RISK, risk);
-    }
-    public int increaseRisk(int risk){
-        this.entityData.set(RISK, this.entityData.get(RISK) + risk);
-        return this.entityData.get(RISK);
-    }
-    public int getRisk(){
-        return this.entityData.get(RISK);
-    }
-    public void setAttacking(boolean attack) {
-        this.entityData.set(ATTACKING, attack);
-    }
-    public boolean isAttacking() {
-        return this.entityData.get(ATTACKING);
     }
 
     @Nullable
@@ -89,19 +67,6 @@ public class WyvernEntity extends Animal implements FlyingAnimal, Animatable<Wyv
         return !isOnGround() && !onClimbable();
     }
 
-
-    protected int getTypeVariant() {
-        return this.entityData.get(DATA_ID_TYPE_VARIANT);
-    }
-
-    @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
-        super.addAdditionalSaveData(tag);
-        tag.putInt("Variant", this.getTypeVariant());
-        tag.putInt("Risk", this.getRisk());
-        tag.putBoolean("IsAsleep", this.isAsleep());
-    }
-
     @Override
     protected PathNavigation createNavigation(Level pLevel) {
         FlyingPathNavigation flyingpathnavigation = new FlyingPathNavigation(this, pLevel);
@@ -109,22 +74,6 @@ public class WyvernEntity extends Animal implements FlyingAnimal, Animatable<Wyv
         flyingpathnavigation.setCanFloat(true);
         flyingpathnavigation.setCanPassDoors(false);
         return flyingpathnavigation;
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
-        super.readAdditionalSaveData(tag);
-        this.entityData.set(DATA_ID_TYPE_VARIANT, tag.getInt("Variant"));
-        this.entityData.set(RISK, tag.getInt("Risk"));
-        this.entityData.set(ASLEEP, tag.getBoolean("IsAsleep"));
-    }
-
-    public boolean isAsleep() {
-        return this.entityData.get(ASLEEP);
-    }
-
-    public void setAsleep(boolean isAsleep) {
-        this.entityData.set(ASLEEP, isAsleep);
     }
 
     @Override
@@ -198,16 +147,6 @@ public class WyvernEntity extends Animal implements FlyingAnimal, Animatable<Wyv
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Animal.class, true, entity -> entity instanceof Cow));
     }
-    public void aiStep() {
-        super.aiStep();
-        if (this.isAsleep()) {
-            this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.0D);
-            this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.0D);
-        } else {
-            this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.2D);
-            this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(1D);
-        }
-    }
 
     public static AttributeSupplier.Builder attributes() {
         return TamableAnimal.createMobAttributes()
@@ -226,28 +165,26 @@ public class WyvernEntity extends Animal implements FlyingAnimal, Animatable<Wyv
     @Override
     public void tick() {
         super.tick();
-        playAnimation("idle", tickCount);
-        /*
-        if (getPose() == Pose.STANDING && !isFlying() && Animatable.isMoving(this)){
+        if (getPose() == Pose.STANDING && !isFlying() && Animatable.isMoving(this)) {
             playAnimation("walk", tickCount);
         } else {
             stopAnimation("walk");
         }
-        if (getPose() == Pose.STANDING && isFlying() && Animatable.isMoving(this)){
+        if (getPose() == Pose.STANDING && isFlying() && Animatable.isMoving(this)) {
             playAnimation("fly", tickCount);
         } else {
             stopAnimation("fly");
         }
-        if (getPose() == Pose.STANDING && !isFlying() && !Animatable.isMoving(this)){
+        if (getPose() == Pose.STANDING && !isFlying() && !Animatable.isMoving(this)) {
             playAnimation("idle", tickCount);
         } else {
             stopAnimation("idle");
         }
-        if (getPose() == Pose.STANDING && isFlying() && !Animatable.isMoving(this)){
+        if (getPose() == Pose.STANDING && isFlying() && !Animatable.isMoving(this)) {
             playAnimation("idle_fly", tickCount);
         } else {
             stopAnimation("idle_fly");
-        }*/
+        }
     }
 
     @Override

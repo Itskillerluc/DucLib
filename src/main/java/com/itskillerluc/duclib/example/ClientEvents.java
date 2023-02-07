@@ -1,11 +1,11 @@
-package com.itskillerluc.duclib.test;
+package com.itskillerluc.duclib.example;
 
 import com.itskillerluc.duclib.DucLib;
 import com.itskillerluc.duclib.client.model.BaseDucModel;
-import com.itskillerluc.duclib.test.client.WyvernModel;
-import com.itskillerluc.duclib.test.client.WyvernRenderer;
-import com.itskillerluc.duclib.test.entities.ModEntities;
-import com.itskillerluc.duclib.test.entities.WyvernEntity;
+import com.itskillerluc.duclib.example.client.WyvernModel;
+import com.itskillerluc.duclib.example.client.WyvernRenderer;
+import com.itskillerluc.duclib.example.entities.ModEntities;
+import com.itskillerluc.duclib.example.entities.WyvernEntity;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;

@@ -1,4 +1,4 @@
-package com.itskillerluc.duclib.test.entities;
+package com.itskillerluc.duclib.example.entities;
 
 import com.itskillerluc.duclib.DucLib;
 import net.minecraft.resources.ResourceLocation;
