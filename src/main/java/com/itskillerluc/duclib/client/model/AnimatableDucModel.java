@@ -27,7 +27,7 @@ public class AnimatableDucModel <T extends Entity & Animatable<?>> extends Hiera
 
     public AnimatableDucModel(Ducling ducling, Function<ResourceLocation, RenderType> renderType) {
         super(renderType);
-        this.root = ducling.getChild("dl_top_root");
+        this.root = ducling;
     }
 
     /**

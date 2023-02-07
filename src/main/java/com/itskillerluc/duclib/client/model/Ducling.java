@@ -119,12 +119,7 @@ public final class Ducling extends ModelPart{
     @Override
     public @NotNull Ducling getChild(@NotNull String pName) {
         //FIXME
-        Ducling ducling;
-        if (pName.equals("dl_top_root")){
-            ducling = this.children.get(pName);
-        } else {
-            ducling = this.children.get(pName);
-        }
+        Ducling ducling = this.children.get(pName);
         if (ducling == null) {
             throw new NoSuchElementException("Can't find part " + pName);
         } else {

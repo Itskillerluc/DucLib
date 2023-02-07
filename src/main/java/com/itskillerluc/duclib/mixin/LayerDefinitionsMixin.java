@@ -43,7 +43,7 @@ public class LayerDefinitionsMixin {
         Geometry geometry = holder.geometry()[0];
         List<Bone> bones = Arrays.stream(geometry.bones()).collect(Collectors.toCollection(ArrayList::new));
         PondDefinition pondDefinition = new PondDefinition();
-        DuclingDefinition topRoot = pondDefinition.getRoot().addOrReplaceChild("dl_top_root", WingListBuilder.create(), PartPose.offset(0, 0, 0));;
+        DuclingDefinition topRoot = pondDefinition.getRoot();
 
         for (int i = 0; i < bones.size(); i++) {
             Bone bone = bones.get(i);
