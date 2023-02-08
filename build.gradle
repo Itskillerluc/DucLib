@@ -19,7 +19,7 @@ apply plugin: "org.spongepowered.mixin"
 
 
 version = '1.0'
-group = 'com.itskillerluc.duclib' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = 'io.github.itskillerluc.duclib' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'duclib'
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
@@ -182,16 +182,50 @@ jar.finalizedBy('reobfJar')
 // publish.dependsOn('reobfJar')
 
 publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact jar
-        }
-    }
     repositories {
         maven {
-            url "file://${project.projectDir}/mcmodsrepo"
+            name = 'Matyrobbrt'
+            url = 'https://maven.matyrobbrt.com/releases'
+            credentials {
+                username = findProperty('matyrobbrtMavenUser') ? matyrobbrtMavenUser : ''
+                password = findProperty('matyrobbrtMavenPassword') ? matyrobbrtMavenPassword : ''
+            }
         }
     }
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            pom(this::configurePom)
+        }
+    }
+}
+
+void configurePom(MavenPom pom) {
+    pom.name = 'DucLib'
+    pom.description = 'A Minecraft entity model and animations library.'
+    pom.url = 'https://github.com/Itskillerluc/DucLib'
+    pom.licenses {
+        license {
+            name = 'MIT License'
+            url = 'https://www.opensource.org/licenses/mit-license.php'
+        }
+    }
+    pom.developers {
+        developer {
+            id = 'itskillerluc'
+            name = 'Itskillerluc'
+        }
+    }
+    pom.scm {
+        connection = 'scm:git:git:github.com/itskillerluc/duclib.git'
+        developerConnection = 'scm:git:ssh://github.com/Itskillerluc/DucLib.git'
+        url = 'https://github.com/Itskillerluc/DucLib'
+    }
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 tasks.withType(JavaCompile).configureEach {
