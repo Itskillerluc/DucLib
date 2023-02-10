@@ -22,6 +22,7 @@ version = '1.0'
 group = 'io.github.itskillerluc.duclib' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'duclib'
 
+
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
@@ -69,7 +70,7 @@ minecraft {
             property 'forge.enabledGameTestNamespaces', 'duclib'
 
             mods {
-                examplemod {
+                duclib {
                     source sourceSets.main
                 }
             }
@@ -180,7 +181,25 @@ jar {
 jar.finalizedBy('reobfJar')
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
 // publish.dependsOn('reobfJar')
+sourceSets {
+    main {
+        resources {
+            srcDirs += 'docs'
+        }
+    }
+}
 
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from sourceSets.main.allJava
+}
+task javadocJar(type: Jar, dependsOn: 'javadoc') {
+    from javadoc.destinationDir
+    classifier = 'javadoc'
+}
+artifacts {
+    archives sourcesJar
+}
 publishing {
     repositories {
         maven {
@@ -194,11 +213,20 @@ publishing {
     }
     publications {
         maven(MavenPublication) {
-            from components.java
+            artifactId = 'duclib-1.19.3'
+
+            artifact jar
+            artifact sourcesJar
+            artifact javadocJar
+
             pom(this::configurePom)
+
         }
     }
+
 }
+
+
 
 void configurePom(MavenPom pom) {
     pom.name = 'DucLib'
