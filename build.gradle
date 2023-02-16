@@ -16,11 +16,11 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'maven-publish'
 apply plugin: "org.spongepowered.mixin"
-
+apply plugin: 'java'
 
 version = '1.0'
 group = 'io.github.itskillerluc.duclib' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'duclib'
+archivesBaseName = 'duclib-1.19.3'
 
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
@@ -160,16 +160,20 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 }
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
 // Example for how to get properties into the manifest for reading at runtime.
 jar {
     manifest {
         attributes([
                 "Specification-Title"     : "duclib",
-                "Specification-Vendor"    : "duclibsareus",
+                "Specification-Vendor"    : "itskillerluc",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "duclibsareus",
+                "Implementation-Vendor"   : "itskillerluc",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                 "MixinConfigs" : "duclib.mixin.json"
         ])
@@ -178,28 +182,17 @@ jar {
 
 // Example configuration to allow publishing using the maven-publish plugin
 // This is the preferred method to reobfuscate your jar file
-jar.finalizedBy('reobfJar')
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
 // publish.dependsOn('reobfJar')
-sourceSets {
-    main {
-        resources {
-            srcDirs += 'docs'
-        }
-    }
-}
 
-task sourcesJar(type: Jar) {
-    archiveClassifier.set('sources')
-    from sourceSets.main.allJava
-}
-task javadocJar(type: Jar, dependsOn: 'javadoc') {
-    from javadoc.destinationDir
-    classifier = 'javadoc'
-}
 artifacts {
+    archives javadocJar
     archives sourcesJar
 }
+jar.finalizedBy('reobfJar')
+
+
+
 publishing {
     repositories {
         maven {
@@ -212,7 +205,7 @@ publishing {
         }
     }
     publications {
-        maven(MavenPublication) {
+        mavenJava(MavenPublication) {
             artifactId = 'duclib-1.19.3'
 
             artifact jar
@@ -220,7 +213,6 @@ publishing {
             artifact javadocJar
 
             pom(this::configurePom)
-
         }
     }
 
@@ -232,6 +224,14 @@ void configurePom(MavenPom pom) {
     pom.name = 'DucLib'
     pom.description = 'A Minecraft entity model and animations library.'
     pom.url = 'https://github.com/Itskillerluc/DucLib'
+//    pom.withXml {
+//        Node pomNode = asNode()
+//        pomNode.dependencies.'*'.findAll(){
+//            it.artifactId.text() == 'parchment'
+//        }.each(){
+//            it.parent().remove(it.parent)
+//        }
+//    }
     pom.licenses {
         license {
             name = 'MIT License'
@@ -249,13 +249,4 @@ void configurePom(MavenPom pom) {
         developerConnection = 'scm:git:ssh://github.com/Itskillerluc/DucLib.git'
         url = 'https://github.com/Itskillerluc/DucLib'
     }
-}
-
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }

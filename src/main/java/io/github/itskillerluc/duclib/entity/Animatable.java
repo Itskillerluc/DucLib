@@ -32,29 +32,29 @@ public interface Animatable <T extends AnimatableDucModel<?>> {
     /**
      * @return true if the entity is moving.
      */
-    static boolean isMoving(LivingEntity entity) {
+    default boolean isMoving(LivingEntity entity) {
         return entity.getDeltaMovement().horizontalDistanceSqr() > 1.0E-6D;
     }
 
     /**
      * Start the animation if it's not already playing
      */
-    default void playAnimation(String animation, int tickCount){
-        Objects.requireNonNull(getAnimationState(animation), "Coudln't find animation: \"" + animation + "\"" ).startIfStopped(tickCount);
+    default void playAnimation(String animation){
+        Objects.requireNonNull(getAnimationState(animation), "Coudln't find animation: \"" + animation + "\"" ).startIfStopped(tickCount());
     }
 
     /**
      * Start regardless of if it's already playing.
      */
-    default void replayAnimation(String animation, int tickCount){
-        getAnimationState(animation).start(tickCount);
+    default void replayAnimation(String animation){
+        getAnimationState(animation).start(tickCount());
     }
 
     /**
      * Animate when the condition is true
      */
-    default void animateWhen(String animation, boolean condition, int tickCount){
-        getAnimationState(animation).animateWhen(condition, tickCount);
+    default void animateWhen(String animation, boolean condition){
+        getAnimationState(animation).animateWhen(condition, tickCount());
     }
 
     /**
@@ -70,4 +70,6 @@ public interface Animatable <T extends AnimatableDucModel<?>> {
      * @return the animation state corresponding to the key.
      */
     AnimationState getAnimationState(String animation);
+
+    int tickCount();
 }
