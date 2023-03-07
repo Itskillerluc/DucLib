@@ -6,9 +6,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.util.Lazy;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * For proper instructions on how to use, check out the wiki on GitHub!
@@ -40,28 +42,28 @@ public interface Animatable <T extends AnimatableDucModel<?>> {
      * Start the animation if it's not already playing
      */
     default void playAnimation(String animation){
-        Objects.requireNonNull(getAnimationState(animation), "Coudln't find animation: \"" + animation + "\"" ).startIfStopped(tickCount());
+        getAnimationState(animation).ifPresentOrElse(animationState -> animationState.startIfStopped(tickCount()), () -> LogManager.getLogger().warn("Could not find animation: " + animation + " for entity"));
     }
 
     /**
      * Start regardless of if it's already playing.
      */
     default void replayAnimation(String animation){
-        getAnimationState(animation).start(tickCount());
+        getAnimationState(animation).ifPresentOrElse(animationState -> animationState.start(tickCount()), () -> LogManager.getLogger().warn("Couldn't not find animation: " + animation + " for entity"));
     }
 
     /**
      * Animate when the condition is true
      */
     default void animateWhen(String animation, boolean condition){
-        getAnimationState(animation).animateWhen(condition, tickCount());
+        getAnimationState(animation).ifPresentOrElse(animationState -> animationState.animateWhen(condition, tickCount()), () -> LogManager.getLogger().warn("Could not find animation: " + animation + " for entity"));
     }
 
     /**
      * stop an animation
      */
     default void stopAnimation(String animation){
-        getAnimationState(animation).stop();
+        getAnimationState(animation).ifPresentOrElse(AnimationState::stop, () -> LogManager.getLogger().warn("Couldn't find animation: " + animation + " for entity"));
     }
 
     /**
@@ -69,7 +71,7 @@ public interface Animatable <T extends AnimatableDucModel<?>> {
      * @param animation animation key
      * @return the animation state corresponding to the key.
      */
-    AnimationState getAnimationState(String animation);
+    Optional<AnimationState> getAnimationState(String animation);
 
     int tickCount();
 }

@@ -118,7 +118,7 @@ public final class Ducling extends ModelPart{
 
     @Override
     public @NotNull Ducling getChild(@NotNull String pName) {
-        //FIXME
+        //FIXME idk whats wrong
         Ducling ducling = this.children.get(pName);
         if (ducling == null) {
             throw new NoSuchElementException("Can't find part " + pName);

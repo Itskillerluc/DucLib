@@ -28,7 +28,7 @@ public abstract class DucAnimation {
         io.github.itskillerluc.duclib.data.animation.serializers.AnimationHolder holder = DucLibAnimationLoader.getAnimation(getLocation());
         Map<String, AnimationHolder> holderMap = new HashMap<>();
         for (Map.Entry<String, Animation> stringAnimationEntry : Objects.requireNonNull(holder, "Couldn't find animation with name \"" + getLocation().toString() + "\"").animations().entrySet()) {
-            AnimationDefinition.Builder builder = AnimationDefinition.Builder.withLength(stringAnimationEntry.getValue().animationLength());
+            AnimationDefinition.Builder builder = AnimationDefinition.Builder.withLength(stringAnimationEntry.getValue().animationLength() == 0 ? 1 : stringAnimationEntry.getValue().animationLength());
             for (Map.Entry<String, Bone> bones : stringAnimationEntry.getValue().bones().entrySet()) {
                 List<Keyframe> positions = new ArrayList<>();
                 List<Keyframe> rotations = new ArrayList<>();
