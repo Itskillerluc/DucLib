@@ -56,8 +56,13 @@ public interface Animatable <T extends AnimatableDucModel<?>> {
      * Animate when the condition is true
      */
     default void animateWhen(String animation, boolean condition){
-        getAnimationState(animation).ifPresentOrElse(animationState -> animationState.animateWhen(condition, tickCount()), () -> LogManager.getLogger().warn("Could not find animation: " + animation + " for entity"));
-    }
+        this.getAnimationState(animation).ifPresentOrElse(state -> {
+            if (condition){
+                state.startIfStopped(tickCount());
+            } else {
+                state.stop();
+            }
+        }, () -> LogManager.getLogger().warn("Couldn't find animation: " + animation + " for entity"));    }
 
     /**
      * stop an animation
