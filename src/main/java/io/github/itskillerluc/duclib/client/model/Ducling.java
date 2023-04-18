@@ -1,8 +1,12 @@
 package io.github.itskillerluc.duclib.client.model;
 
-import io.github.itskillerluc.duclib.client.model.definitions.AdvancedUV;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
+import com.mojang.math.Vector4f;
+import io.github.itskillerluc.duclib.client.model.definitions.AdvancedUV;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.core.Direction;
@@ -11,7 +15,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Lazy;
 import org.jetbrains.annotations.NotNull;
-import org.joml.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -200,10 +203,15 @@ public final class Ducling extends ModelPart{
     @Override
     public void translateAndRotate(PoseStack pPoseStack) {
         pPoseStack.translate(this.x / 16.0F, this.y / 16.0F, this.z / 16.0F);
-        if (this.xRot != 0.0F || this.yRot != 0.0F || this.zRot != 0.0F) {
-            pPoseStack.mulPose((new Quaternionf()).rotationZYX(this.zRot, this.yRot, this.xRot));
+        if (this.zRot != 0.0F) {
+            pPoseStack.mulPose(Vector3f.ZP.rotation(this.zRot));
         }
-
+        if (this.yRot != 0.0F) {
+            pPoseStack.mulPose(Vector3f.YP.rotation(this.yRot));
+        }
+        if (this.xRot != 0.0F) {
+            pPoseStack.mulPose(Vector3f.XP.rotation(this.xRot));
+        }
         if (this.xScale != 1.0F || this.yScale != 1.0F || this.zScale != 1.0F) {
             pPoseStack.scale(this.xScale, this.yScale, this.zScale);
         }
@@ -395,7 +403,8 @@ public final class Ducling extends ModelPart{
             Matrix3f matrix3f = pPose.normal();
 
             for(Feather ducling$feather : this.feathers) {
-                Vector3f vector3f = matrix3f.transform(new Vector3f(ducling$feather.normal));
+                Vector3f vector3f = ducling$feather.normal.copy();
+                vector3f.transform(matrix3f);
                 float f = vector3f.x();
                 float f1 = vector3f.y();
                 float f2 = vector3f.z();
@@ -404,7 +413,8 @@ public final class Ducling extends ModelPart{
                     float f3 = ducling$barb.pos.x() / 16.0F;
                     float f4 = ducling$barb.pos.y() / 16.0F;
                     float f5 = ducling$barb.pos.z() / 16.0F;
-                    Vector4f vector4f = matrix4f.transform(new Vector4f(f3, f4, f5, 1.0F));
+                    Vector4f vector4f = new Vector4f(f3, f4, f5, 1.0F);
+                    vector4f.transform(matrix4f);
                     pVertexConsumer.vertex(vector4f.x(), vector4f.y(), vector4f.z(), pRed, pGreen, pBlue, pAlpha, ducling$barb.u, ducling$barb.v, pPackedOverlay, pPackedLight, f, f1, f2);
                 }
             }

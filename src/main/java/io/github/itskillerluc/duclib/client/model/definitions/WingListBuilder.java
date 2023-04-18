@@ -255,7 +255,7 @@ public class WingListBuilder extends CubeListBuilder {
     }
 
     /**
-     * @return get all of the cubes in this builder.
+     * @return get all the cubes in this builder.
      */
     @Override
     public @NotNull List<CubeDefinition> getCubes() {

@@ -1,19 +1,17 @@
 package io.github.itskillerluc.duclib.client.model.definitions;
 
+import com.mojang.math.Vector3f;
 import io.github.itskillerluc.duclib.client.model.Ducling;
 import net.minecraft.client.model.geom.builders.CubeDefinition;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.UVPair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 
 /**
  * DucLib version of CubeDefinition
  */
 public class WingDefinition extends CubeDefinition {
-    @javax.annotation.Nullable
-    private final String comment;
     private final Vector3f origin;
     private final Vector3f dimensions;
     private final CubeDeformation grow;
@@ -23,7 +21,6 @@ public class WingDefinition extends CubeDefinition {
 
     protected WingDefinition(@Nullable String pComment, AdvancedUV[] featherUVs, float pOriginX, float pOriginY, float pOriginZ, float pDimensionX, float pDimensionY, float pDimensionZ, CubeDeformation pGrow, boolean pMirror, float pTexScaleU, float pTexScaleV) {
         super(pComment, featherUVs[0].uv().u(), featherUVs[0].uv().v(), pOriginX, pOriginY, pOriginZ, pDimensionX, pDimensionY, pDimensionZ, pGrow, pMirror, pTexScaleU, pTexScaleV);
-        this.comment = pComment;
         this.featherUVs = featherUVs;
         this.origin = new Vector3f(pOriginX, pOriginY, pOriginZ);
         this.dimensions = new Vector3f(pDimensionX, pDimensionY, pDimensionZ);

@@ -17,7 +17,7 @@ public record Bone(Map<String, KeyFrame> rotation, Map<String, KeyFrame> positio
 
             if (json.getAsJsonObject().get("rotation") != null) {
                 if (json.getAsJsonObject().get("rotation").isJsonObject()) {
-                    for (Map.Entry<String, JsonElement> rotation : json.getAsJsonObject().get("rotation").getAsJsonObject().asMap().entrySet()) {
+                    for (Map.Entry<String, JsonElement> rotation : json.getAsJsonObject().get("rotation").getAsJsonObject().entrySet()) {
                         rotations.put(rotation.getKey().equals("vector") ? "0.0" : rotation.getKey(), createFrame(rotation));
                     }
                 } else {
@@ -26,7 +26,7 @@ public record Bone(Map<String, KeyFrame> rotation, Map<String, KeyFrame> positio
             }
             if (json.getAsJsonObject().get("position") != null) {
                 if (json.getAsJsonObject().get("position").isJsonObject()) {
-                    for (Map.Entry<String, JsonElement> position : json.getAsJsonObject().get("position").getAsJsonObject().asMap().entrySet()) {
+                    for (Map.Entry<String, JsonElement> position : json.getAsJsonObject().get("position").getAsJsonObject().entrySet()) {
                         positions.put(position.getKey().equals("vector") ? "0.0" : position.getKey(), createFrame(position));
                     }
                 } else {
@@ -35,7 +35,7 @@ public record Bone(Map<String, KeyFrame> rotation, Map<String, KeyFrame> positio
             }
             if (json.getAsJsonObject().get("scale") != null) {
                 if (json.getAsJsonObject().get("scale").isJsonObject()) {
-                    for (Map.Entry<String, JsonElement> scale : json.getAsJsonObject().get("scale").getAsJsonObject().asMap().entrySet()) {
+                    for (Map.Entry<String, JsonElement> scale : json.getAsJsonObject().get("scale").getAsJsonObject().entrySet()) {
                         scales.put(scale.getKey().equals("vector") ? "0.0" : scale.getKey(), createFrame(scale));
                     }
                 } else {
@@ -49,8 +49,6 @@ public record Bone(Map<String, KeyFrame> rotation, Map<String, KeyFrame> positio
             JsonObject object = new JsonObject();
             object.add(element.getKey(), element.getValue());
             return KeyFrame.deserialize(element.getValue());
-            /*return element.getValue().isJsonArray() ? new KeyFrame((element.getValue().getAsJsonArray().asList().stream().mapToDouble(JsonElement::getAsDouble).toArray()), "linear") :
-                    new KeyFrame(Optional.ofNullable(element.getValue().getAsJsonObject().get("vector")).orElse(element.getValue().getAsJsonObject().get("post")).getAsJsonArray().asList().stream().mapToDouble(JsonElement::getAsDouble).toArray(), element.getValue().getAsJsonObject().has("lerp_mode") ? element.getValue().getAsJsonObject().get("lerp_mode").getAsString() : "linear");
-        */}
+        }
     }
 }

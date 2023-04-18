@@ -4,19 +4,21 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import net.minecraft.Util;
 
+import java.util.stream.StreamSupport;
+
 public record KeyFrame(double[] pre, double[] post, String lerpMode) {
     public static KeyFrame deserialize(JsonElement json) throws JsonParseException {
         if (!json.isJsonObject()) {
-            return new KeyFrame(null, json.getAsJsonArray().asList().stream().mapToDouble(JsonElement::getAsDouble).toArray(), "linear");
+            return new KeyFrame(null, StreamSupport.stream(json.getAsJsonArray().spliterator(), false).mapToDouble(JsonElement::getAsDouble).toArray(), "linear");
         }
         JsonElement preJson = json.getAsJsonObject().get("pre");
         double[] pre;
         if (preJson == null) {
             pre = null;
         } else if (preJson.isJsonArray()) {
-            pre = preJson.getAsJsonArray().asList().stream().mapToDouble(JsonElement::getAsDouble).toArray();
+            pre = StreamSupport.stream(preJson.getAsJsonArray().spliterator(), false).mapToDouble(JsonElement::getAsDouble).toArray();
         } else if (preJson.isJsonObject()) {
-            pre = preJson.getAsJsonObject().get("vector").getAsJsonArray().asList().stream().mapToDouble(JsonElement::getAsDouble).toArray();
+            pre = StreamSupport.stream(preJson.getAsJsonObject().get("vector").getAsJsonArray().spliterator(), false).mapToDouble(JsonElement::getAsDouble).toArray();
         } else {
             pre = null;
         }
@@ -24,14 +26,14 @@ public record KeyFrame(double[] pre, double[] post, String lerpMode) {
         double[] post;
         if (postJson == null) {
             if (json.getAsJsonObject().has("vector")) {
-                post = json.getAsJsonObject().get("vector").getAsJsonArray().asList().stream().mapToDouble(JsonElement::getAsDouble).toArray();
+                post = StreamSupport.stream(json.getAsJsonObject().get("vector").getAsJsonArray().spliterator(), false).mapToDouble(JsonElement::getAsDouble).toArray();
             } else {
                 post = null;
             }
         } else if (postJson.isJsonArray()) {
-            post = postJson.getAsJsonArray().asList().stream().mapToDouble(JsonElement::getAsDouble).toArray();
+            post = StreamSupport.stream(postJson.getAsJsonArray().spliterator(), false).mapToDouble(JsonElement::getAsDouble).toArray();
         } else if (postJson.isJsonObject()) {
-            post = postJson.getAsJsonObject().get("vector").getAsJsonArray().asList().stream().mapToDouble(JsonElement::getAsDouble).toArray();
+            post = StreamSupport.stream(postJson.getAsJsonObject().get("vector").getAsJsonArray().spliterator(), false).mapToDouble(JsonElement::getAsDouble).toArray();
         } else {
             post = null;
         }

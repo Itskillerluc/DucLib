@@ -23,7 +23,7 @@ public class AnimatableDucRenderer<T extends LivingEntity & Animatable<M>, M ext
     }
 
     @Override
-    protected boolean shouldShowName(T pEntity) {
+    protected boolean shouldShowName(@NotNull T pEntity) {
         return super.shouldShowName(pEntity) && (pEntity.shouldShowName() || pEntity.hasCustomName() && pEntity == this.entityRenderDispatcher.crosshairPickEntity);
     }
 
