@@ -4,8 +4,87 @@ import com.google.gson.*;
 import com.mojang.datafixers.util.Either;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.Objects;
 
-public record Cube(float[] origin, float[] size, float[] rotation, float[] pivot, float inflate, Either<UV, int[]> uv, boolean mirror) {
+public final class Cube {
+    private final float[] origin;
+    private final float[] size;
+    private final float[] rotation;
+    private final float[] pivot;
+    private final float inflate;
+    private final Either<UV, int[]> uv;
+    private final boolean mirror;
+
+    public Cube(float[] origin, float[] size, float[] rotation, float[] pivot, float inflate, Either<UV, int[]> uv, boolean mirror) {
+        this.origin = origin;
+        this.size = size;
+        this.rotation = rotation;
+        this.pivot = pivot;
+        this.inflate = inflate;
+        this.uv = uv;
+        this.mirror = mirror;
+    }
+
+    public float[] origin() {
+        return origin;
+    }
+
+    public float[] size() {
+        return size;
+    }
+
+    public float[] rotation() {
+        return rotation;
+    }
+
+    public float[] pivot() {
+        return pivot;
+    }
+
+    public float inflate() {
+        return inflate;
+    }
+
+    public Either<UV, int[]> uv() {
+        return uv;
+    }
+
+    public boolean mirror() {
+        return mirror;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (Cube) obj;
+        return Arrays.equals(this.origin, that.origin) &&
+                Arrays.equals(this.size, that.size) &&
+                Arrays.equals(this.rotation, that.rotation) &&
+                Arrays.equals(this.pivot, that.pivot) &&
+                Float.floatToIntBits(this.inflate) == Float.floatToIntBits(that.inflate) &&
+                Objects.equals(this.uv, that.uv) &&
+                this.mirror == that.mirror;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Arrays.hashCode(origin), Arrays.hashCode(size), Arrays.hashCode(rotation), Arrays.hashCode(pivot), inflate, uv, mirror);
+    }
+
+    @Override
+    public String toString() {
+        return "Cube[" +
+                "origin=" + Arrays.toString(origin) + ", " +
+                "size=" + Arrays.toString(size) + ", " +
+                "rotation=" + Arrays.toString(rotation) + ", " +
+                "pivot=" + Arrays.toString(pivot) + ", " +
+                "inflate=" + inflate + ", " +
+                "uv=" + uv + ", " +
+                "mirror=" + mirror + ']';
+    }
+
     public static class adapter implements JsonDeserializer<Cube> {
         private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
 
@@ -17,10 +96,10 @@ public record Cube(float[] origin, float[] size, float[] rotation, float[] pivot
             float inflate = 0;
             boolean mirror = false;
             Either<UV, int[]> uv;
-            if (parent.has("inflate")){
+            if (parent.has("inflate")) {
                 inflate = parent.get("inflate").getAsFloat();
             }
-            if (parent.has("mirror")){
+            if (parent.has("mirror")) {
                 mirror = parent.get("mirror").getAsBoolean();
             }
             if (parent.has("origin")) {
@@ -49,7 +128,7 @@ public record Cube(float[] origin, float[] size, float[] rotation, float[] pivot
             }
 
             if (parent.has("uv")) {
-                if (parent.get("uv").isJsonArray()){
+                if (parent.get("uv").isJsonArray()) {
                     uv = Either.right(new int[]{parent.getAsJsonArray("uv").get(0).getAsInt(), parent.getAsJsonArray("uv").get(1).getAsInt()});
                 } else {
                     uv = Either.left(GSON.fromJson(parent.get("uv"), UV.class));

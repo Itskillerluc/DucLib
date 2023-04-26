@@ -5,8 +5,54 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
-public record Bone(Map<String, KeyFrame> rotation, Map<String, KeyFrame> position, Map<String, KeyFrame> scale) {
+public final class Bone {
+    private final Map<String, KeyFrame> rotation;
+    private final Map<String, KeyFrame> position;
+    private final Map<String, KeyFrame> scale;
+
+    public Bone(Map<String, KeyFrame> rotation, Map<String, KeyFrame> position, Map<String, KeyFrame> scale) {
+        this.rotation = rotation;
+        this.position = position;
+        this.scale = scale;
+    }
+
+    public Map<String, KeyFrame> rotation() {
+        return rotation;
+    }
+
+    public Map<String, KeyFrame> position() {
+        return position;
+    }
+
+    public Map<String, KeyFrame> scale() {
+        return scale;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (Bone) obj;
+        return Objects.equals(this.rotation, that.rotation) &&
+                Objects.equals(this.position, that.position) &&
+                Objects.equals(this.scale, that.scale);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(rotation, position, scale);
+    }
+
+    @Override
+    public String toString() {
+        return "Bone[" +
+                "rotation=" + rotation + ", " +
+                "position=" + position + ", " +
+                "scale=" + scale + ']';
+    }
+
     public static class adapter implements JsonDeserializer<Bone> {
 
         @Override
