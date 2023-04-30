@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.Objects;
 
 public final class Bone {
-    private final Map<String, KeyFrame> rotation;
-    private final Map<String, KeyFrame> position;
-    private final Map<String, KeyFrame> scale;
+    private Map<String, KeyFrame> rotation;
+    private Map<String, KeyFrame> position;
+    private Map<String, KeyFrame> scale;
 
     public Bone(Map<String, KeyFrame> rotation, Map<String, KeyFrame> position, Map<String, KeyFrame> scale) {
         this.rotation = rotation;

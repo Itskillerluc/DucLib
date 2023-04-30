@@ -6,8 +6,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public final class FaceUV {
-    private final int[] uv;
-    private final int[] uvSize;
+    private int[] uv;
+    private int[] uvSize;
 
     public FaceUV(int[] uv, int[] uvSize) {
         if (uv.length == 0) {

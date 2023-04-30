@@ -7,12 +7,12 @@ import java.util.Objects;
 
 @SuppressWarnings("unused")
 public final class Description {
-    private final String identifier;
-    private final int textureWidth;
-    private final int textureHeight;
-    private final float visibleBoundsWidth;
-    private final float visibleBoundsHeight;
-    private final float[] visibleBoundsOffset;
+    private String identifier;
+    private int textureWidth;
+    private int textureHeight;
+    private float visibleBoundsWidth;
+    private float visibleBoundsHeight;
+    private float[] visibleBoundsOffset;
 
     public Description(String identifier, int textureWidth, int textureHeight, float visibleBoundsWidth, float visibleBoundsHeight, float[] visibleBoundsOffset) {
         if (identifier == null) {

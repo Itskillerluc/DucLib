@@ -5,12 +5,12 @@ import com.google.gson.JsonParseException;
 import java.util.Objects;
 
 public final class UV {
-    private final FaceUV north;
-    private final FaceUV east;
-    private final FaceUV south;
-    private final FaceUV west;
-    private final FaceUV up;
-    private final FaceUV down;
+    private FaceUV north;
+    private FaceUV east;
+    private FaceUV south;
+    private FaceUV west;
+    private FaceUV up;
+    private FaceUV down;
 
     public UV(FaceUV north, FaceUV east, FaceUV south, FaceUV west, FaceUV up, FaceUV down) {
         if (north == null) {

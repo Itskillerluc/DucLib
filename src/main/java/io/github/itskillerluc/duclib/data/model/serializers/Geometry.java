@@ -6,8 +6,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public final class Geometry {
-    private final Description description;
-    private final Bone[] bones;
+    private Description description;
+    private Bone[] bones;
 
     public Geometry(Description description, Bone[] bones) {
         if (description == null) {

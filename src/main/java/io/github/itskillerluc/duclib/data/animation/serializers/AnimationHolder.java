@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public final class AnimationHolder {
-    private final Map<String, Animation> animations;
+    private Map<String, Animation> animations;
 
     public AnimationHolder(Map<String, Animation> animations) {
         if (animations == null) {

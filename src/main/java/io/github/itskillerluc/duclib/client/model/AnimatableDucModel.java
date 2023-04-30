@@ -56,7 +56,7 @@ public class AnimatableDucModel <T extends Entity & Animatable<?>> extends Hiera
         for (Map.Entry<String, AnimationState> stringAnimationStateEntry : pEntity.getAnimations().get().entrySet()) {
             if (!excludeAnimations().contains(stringAnimationStateEntry.getKey())) {
                 AnimationHolder animation = pEntity.getAnimation().getAnimations().get(stringAnimationStateEntry.getKey());
-                this.animate(stringAnimationStateEntry.getValue(), animation.animation(), pAgeInTicks, animation.speed());
+                this.animate(stringAnimationStateEntry.getValue(), animation.animation(), pAgeInTicks, animation.speed() != 0 ? animation.speed() : 1);
             }
         }
     }

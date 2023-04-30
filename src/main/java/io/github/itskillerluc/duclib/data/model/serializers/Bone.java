@@ -6,11 +6,11 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public final class Bone {
-    private final String name;
-    private final String parent;
-    private final float[] pivot;
-    private final float[] rotation;
-    private final Cube[] cubes;
+    private String name;
+    private String parent;
+    private float[] pivot;
+    private float[] rotation;
+    private Cube[] cubes;
 
     public Bone(String name, String parent, float[] pivot, float[] rotation, Cube[] cubes) {
         if (name == null) {
@@ -39,7 +39,7 @@ public final class Bone {
     }
 
     public float[] rotation() {
-        return rotation;
+        return Objects.requireNonNullElseGet(rotation, () -> new float[]{0, 0, 0});
     }
 
     public Cube[] cubes() {

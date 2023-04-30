@@ -6,10 +6,10 @@ import java.util.Map;
 import java.util.Objects;
 
 public final class Animation {
-    private final boolean loop;
-    private final float animationLength;
-    private final float speed;
-    private final Map<String, Bone> bones;
+    private boolean loop;
+    private float animationLength;
+    private float speed;
+    private Map<String, Bone> bones;
 
     public Animation(boolean loop, float animationLength, float speed, Map<String, Bone> bones) {
         if (bones == null) {

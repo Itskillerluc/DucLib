@@ -9,9 +9,9 @@ import java.util.Objects;
 import java.util.stream.StreamSupport;
 
 public final class KeyFrame {
-    private final double[] pre;
-    private final double[] post;
-    private final String lerpMode;
+    private double[] pre;
+    private double[] post;
+    private String lerpMode;
 
     public KeyFrame(double[] pre, double[] post, String lerpMode) {
         this.pre = pre;

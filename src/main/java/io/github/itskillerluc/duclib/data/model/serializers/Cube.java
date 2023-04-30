@@ -8,13 +8,13 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public final class Cube {
-    private final float[] origin;
-    private final float[] size;
-    private final float[] rotation;
-    private final float[] pivot;
-    private final float inflate;
-    private final Either<UV, int[]> uv;
-    private final boolean mirror;
+    private float[] origin;
+    private float[] size;
+    private float[] rotation;
+    private float[] pivot;
+    private float inflate;
+    private Either<UV, int[]> uv;
+    private boolean mirror;
 
     public Cube(float[] origin, float[] size, float[] rotation, float[] pivot, float inflate, Either<UV, int[]> uv, boolean mirror) {
         this.origin = origin;

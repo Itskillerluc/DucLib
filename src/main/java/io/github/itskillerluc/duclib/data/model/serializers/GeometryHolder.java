@@ -8,8 +8,8 @@ import java.util.Objects;
 
 public final class GeometryHolder {
     @SerializedName("minecraft:geometry")
-    private final Geometry[] geometry;
-    private final boolean override;
+    private Geometry[] geometry;
+    private boolean override;
 
     public GeometryHolder(Geometry[] geometry, boolean override) {
         if (geometry == null) {
