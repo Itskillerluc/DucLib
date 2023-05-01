@@ -118,7 +118,6 @@ public final class Ducling extends ModelPart{
 
     @Override
     public @NotNull Ducling getChild(@NotNull String pName) {
-        //FIXME idk whats wrong
         Ducling ducling = this.children.get(pName);
         if (ducling == null) {
             throw new NoSuchElementException("Can't find part " + pName);
@@ -266,27 +265,27 @@ public final class Ducling extends ModelPart{
     @OnlyIn(Dist.CLIENT)
     public static class Wing extends ModelPart.Cube{
         private final Feather[] feathers;
-        public final float x1;
-        public final float y1;
-        public final float z1;
-        public final float x2;
-        public final float y2;
-        public final float z2;
+        public final float xMin;
+        public final float yMin;
+        public final float zMin;
+        public final float xMax;
+        public final float yMax;
+        public final float zMax;
 
         /**
          * this is the DucLib equivalent of ModelPart$Cube
          */
         public Wing(AdvancedUV[] featherUVs, float originX, float originY, float originZ, float pDimensionX, float pDimensionY, float pDimensionZ, float pGrowX, float pGrowY, float pGrowZ, boolean pMirror, float pTexWidthScaled, float pTexHeightScaled, Set<Direction> visibleFaces) {
             super((int) featherUVs[0].uv().u(), (int) featherUVs[0].uv().v(), originX, originY, originZ, pDimensionX, pDimensionY, pDimensionZ, pGrowX, pGrowY, pGrowZ, pMirror, pTexWidthScaled, pTexHeightScaled,visibleFaces);
-            this.x1 = originX;
-            this.y1 = originY;
-            this.z1 = originZ;
+            this.xMin = originX;
+            this.yMin = originY;
+            this.zMin = originZ;
 
-            this.x2 = originX + pDimensionX;
-            this.y2 = originY + pDimensionY;
-            this.z2 = originZ + pDimensionZ;
+            this.xMax = originX + pDimensionX;
+            this.yMax = originY + pDimensionY;
+            this.zMax = originZ + pDimensionZ;
 
-            this.feathers = new Feather[6];
+            this.feathers = new Feather[visibleFaces.size()];
 
             float x = originX + pDimensionX;
             float y = originY + pDimensionY;
@@ -322,26 +321,37 @@ public final class Ducling extends ModelPart{
             Barb ducling$barb5 = new Barb(x, y, z, 8.0F, 8.0F);
             //(0, 1, 1)
             Barb ducling$barb6 = new Barb(originX, y, z, 8.0F, 0.0F);
-
+            int i = 0;
             Map<Direction, AdvancedUV> featherUVMap = Arrays.stream(featherUVs).collect(Collectors.toMap(AdvancedUV::direction, value -> value));
-
-            this.feathers[2] = new Feather(new Barb[]{ducling$barb4, ducling$barb3, ducling$barb7, ducling$barb}, featherUVMap.get(Direction.UP).uv().u(), featherUVMap.get(Direction.UP).uv().v(), featherUVMap.get(Direction.UP).uv().u() + featherUVMap.get(Direction.UP).uvSize().u(), featherUVMap.get(Direction.UP).uv().v() + featherUVMap.get(Direction.UP).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.DOWN);
-            this.feathers[3] = new Feather(new Barb[]{ducling$barb1, ducling$barb2, ducling$barb6, ducling$barb5}, featherUVMap.get(Direction.DOWN).uv().u(), featherUVMap.get(Direction.DOWN).uv().v(), featherUVMap.get(Direction.DOWN).uv().u() + featherUVMap.get(Direction.DOWN).uvSize().u(), featherUVMap.get(Direction.DOWN).uv().v() + featherUVMap.get(Direction.DOWN).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.UP);
-            this.feathers[1] = new Feather(new Barb[]{ducling$barb7, ducling$barb3, ducling$barb6, ducling$barb2}, featherUVMap.get(Direction.EAST).uv().u(), featherUVMap.get(Direction.EAST).uv().v(), featherUVMap.get(Direction.EAST).uv().u() + featherUVMap.get(Direction.EAST).uvSize().u(), featherUVMap.get(Direction.EAST).uv().v() + featherUVMap.get(Direction.EAST).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.EAST);
-            this.feathers[4] = new Feather(new Barb[]{ducling$barb, ducling$barb7, ducling$barb2, ducling$barb1}, featherUVMap.get(Direction.NORTH).uv().u(), featherUVMap.get(Direction.NORTH).uv().v(), featherUVMap.get(Direction.NORTH).uv().u() + featherUVMap.get(Direction.NORTH).uvSize().u(), featherUVMap.get(Direction.NORTH).uv().v() + featherUVMap.get(Direction.NORTH).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.NORTH);
-            this.feathers[0] = new Feather(new Barb[]{ducling$barb4, ducling$barb, ducling$barb1, ducling$barb5}, featherUVMap.get(Direction.WEST).uv().u(), featherUVMap.get(Direction.WEST).uv().v(), featherUVMap.get(Direction.WEST).uv().u() + featherUVMap.get(Direction.WEST).uvSize().u(), featherUVMap.get(Direction.WEST).uv().v() + featherUVMap.get(Direction.WEST).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.WEST);
-            this.feathers[5] = new Feather(new Barb[]{ducling$barb3, ducling$barb4, ducling$barb5, ducling$barb6}, featherUVMap.get(Direction.SOUTH).uv().u(), featherUVMap.get(Direction.SOUTH).uv().v(), featherUVMap.get(Direction.SOUTH).uv().u() + featherUVMap.get(Direction.SOUTH).uvSize().u(), featherUVMap.get(Direction.SOUTH).uv().v() + featherUVMap.get(Direction.SOUTH).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.SOUTH);
+            if (visibleFaces.contains(Direction.DOWN)) {
+                this.feathers[i++] = new Feather(new Barb[]{ducling$barb4, ducling$barb3, ducling$barb7, ducling$barb}, featherUVMap.get(Direction.UP).uv().u(), featherUVMap.get(Direction.UP).uv().v(), featherUVMap.get(Direction.UP).uv().u() + featherUVMap.get(Direction.UP).uvSize().u(), featherUVMap.get(Direction.UP).uv().v() + featherUVMap.get(Direction.UP).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.DOWN);
+            }
+            if (visibleFaces.contains(Direction.UP)) {
+                this.feathers[i++] = new Feather(new Barb[]{ducling$barb1, ducling$barb2, ducling$barb6, ducling$barb5}, featherUVMap.get(Direction.DOWN).uv().u(), featherUVMap.get(Direction.DOWN).uv().v(), featherUVMap.get(Direction.DOWN).uv().u() + featherUVMap.get(Direction.DOWN).uvSize().u(), featherUVMap.get(Direction.DOWN).uv().v() + featherUVMap.get(Direction.DOWN).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.UP);
+            }
+            if (visibleFaces.contains(Direction.WEST)) {
+                this.feathers[i++] = new Feather(new Barb[]{ducling$barb7, ducling$barb3, ducling$barb6, ducling$barb2}, featherUVMap.get(Direction.EAST).uv().u(), featherUVMap.get(Direction.EAST).uv().v(), featherUVMap.get(Direction.EAST).uv().u() + featherUVMap.get(Direction.EAST).uvSize().u(), featherUVMap.get(Direction.EAST).uv().v() + featherUVMap.get(Direction.EAST).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.EAST);
+            }
+            if (visibleFaces.contains(Direction.NORTH)) {
+                this.feathers[i++] = new Feather(new Barb[]{ducling$barb, ducling$barb7, ducling$barb2, ducling$barb1}, featherUVMap.get(Direction.NORTH).uv().u(), featherUVMap.get(Direction.NORTH).uv().v(), featherUVMap.get(Direction.NORTH).uv().u() + featherUVMap.get(Direction.NORTH).uvSize().u(), featherUVMap.get(Direction.NORTH).uv().v() + featherUVMap.get(Direction.NORTH).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.NORTH);
+            }
+            if (visibleFaces.contains(Direction.EAST)) {
+                this.feathers[i++] = new Feather(new Barb[]{ducling$barb4, ducling$barb, ducling$barb1, ducling$barb5}, featherUVMap.get(Direction.WEST).uv().u(), featherUVMap.get(Direction.WEST).uv().v(), featherUVMap.get(Direction.WEST).uv().u() + featherUVMap.get(Direction.WEST).uvSize().u(), featherUVMap.get(Direction.WEST).uv().v() + featherUVMap.get(Direction.WEST).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.WEST);
+            }
+            if (visibleFaces.contains(Direction.SOUTH)) {
+                this.feathers[i++] = new Feather(new Barb[]{ducling$barb3, ducling$barb4, ducling$barb5, ducling$barb6}, featherUVMap.get(Direction.SOUTH).uv().u(), featherUVMap.get(Direction.SOUTH).uv().v(), featherUVMap.get(Direction.SOUTH).uv().u() + featherUVMap.get(Direction.SOUTH).uvSize().u(), featherUVMap.get(Direction.SOUTH).uv().v() + featherUVMap.get(Direction.SOUTH).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.SOUTH);
+            }
         }
 
         public Wing(int pTexCoordU, int pTexCoordV, float pMinX, float pMinY, float pMinZ, float pDimensionX, float pDimensionY, float pDimensionZ, float pGrowX, float pGrowY, float pGrowZ, boolean pMirror, float pTexWidthScaled, float pTexHeightScaled, Set<Direction> visibleFaces) {
             super(pTexCoordU, pTexCoordV, pMinX, pMinY, pMinZ, pDimensionX, pDimensionY, pDimensionZ, pGrowX, pGrowY, pGrowZ, pMirror, pTexWidthScaled, pTexHeightScaled, visibleFaces);
-            this.x1 = pMinX;
-            this.y1 = pMinY;
-            this.z1 = pMinZ;
+            this.xMin = pMinX;
+            this.yMin = pMinY;
+            this.zMin = pMinZ;
 
-            this.x2 = pMinX + pDimensionX;
-            this.y2 = pMinY + pDimensionY;
-            this.z2 = pMinZ + pDimensionZ;
+            this.xMax = pMinX + pDimensionX;
+            this.yMax = pMinY + pDimensionY;
+            this.zMax = pMinZ + pDimensionZ;
 
             this.feathers = new Ducling.Feather[6];
             float f = pMinX + pDimensionX;
@@ -390,7 +400,7 @@ public final class Ducling extends ModelPart{
             }
 
             if (visibleFaces.contains(Direction.NORTH)) {
-                this.feathers[i++] = new Ducling.Feather(new Ducling.Barb[]{ducling$barb, ducling$barb7, ducling$barb2, ducling$barb}, f5, f11, f6, f12, pTexWidthScaled, pTexHeightScaled, pMirror, Direction.NORTH);
+                this.feathers[i++] = new Ducling.Feather(new Ducling.Barb[]{ducling$barb, ducling$barb7, ducling$barb2, ducling$barb1}, f5, f11, f6, f12, pTexWidthScaled, pTexHeightScaled, pMirror, Direction.NORTH);
             }
 
             if (visibleFaces.contains(Direction.EAST)) {
@@ -398,7 +408,7 @@ public final class Ducling extends ModelPart{
             }
 
             if (visibleFaces.contains(Direction.SOUTH)) {
-                    this.feathers[i] = new Ducling.Feather(new Ducling.Barb[]{ducling$barb3, ducling$barb4, ducling$barb5, ducling$barb6}, f8, f11, f9, f12, pTexWidthScaled, pTexHeightScaled, pMirror, Direction.SOUTH);
+                this.feathers[i] = new Ducling.Feather(new Ducling.Barb[]{ducling$barb3, ducling$barb4, ducling$barb5, ducling$barb6}, f8, f11, f9, f12, pTexWidthScaled, pTexHeightScaled, pMirror, Direction.SOUTH);
             }
         }
 
