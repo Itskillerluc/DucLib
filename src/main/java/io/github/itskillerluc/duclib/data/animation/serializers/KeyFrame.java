@@ -36,7 +36,7 @@ public record KeyFrame(double[] pre, double[] post, String lerpMode) {
             post = null;
         }
         JsonElement lerpModeJson = json.getAsJsonObject().get("lerp_mode");
-        String lerpMode = Util.mapNullable(lerpModeJson, JsonElement::getAsString);
+        String lerpMode = lerpModeJson.getAsString();
         return new KeyFrame(pre, post, lerpMode);
     }
 }

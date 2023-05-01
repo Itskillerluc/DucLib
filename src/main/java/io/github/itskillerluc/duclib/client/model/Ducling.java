@@ -276,8 +276,8 @@ public final class Ducling extends ModelPart{
         /**
          * this is the DucLib equivalent of ModelPart$Cube
          */
-        public Wing(AdvancedUV[] featherUVs, float originX, float originY, float originZ, float pDimensionX, float pDimensionY, float pDimensionZ, float pGrowX, float pGrowY, float pGrowZ, boolean pMirror, float pTexWidthScaled, float pTexHeightScaled) {
-            super((int) featherUVs[0].uv().u(), (int) featherUVs[0].uv().v(), originX, originY, originZ, pDimensionX, pDimensionY, pDimensionZ, pGrowX, pGrowY, pGrowZ, pMirror, (int)pTexWidthScaled, (int)pTexHeightScaled);
+        public Wing(AdvancedUV[] featherUVs, float originX, float originY, float originZ, float pDimensionX, float pDimensionY, float pDimensionZ, float pGrowX, float pGrowY, float pGrowZ, boolean pMirror, float pTexWidthScaled, float pTexHeightScaled, Set<Direction> visibleFaces) {
+            super((int) featherUVs[0].uv().u(), (int) featherUVs[0].uv().v(), originX, originY, originZ, pDimensionX, pDimensionY, pDimensionZ, pGrowX, pGrowY, pGrowZ, pMirror, pTexWidthScaled, pTexHeightScaled,visibleFaces);
             this.x1 = originX;
             this.y1 = originY;
             this.z1 = originZ;
@@ -333,8 +333,8 @@ public final class Ducling extends ModelPart{
             this.feathers[5] = new Feather(new Barb[]{ducling$barb3, ducling$barb4, ducling$barb5, ducling$barb6}, featherUVMap.get(Direction.SOUTH).uv().u(), featherUVMap.get(Direction.SOUTH).uv().v(), featherUVMap.get(Direction.SOUTH).uv().u() + featherUVMap.get(Direction.SOUTH).uvSize().u(), featherUVMap.get(Direction.SOUTH).uv().v() + featherUVMap.get(Direction.SOUTH).uvSize().v(), pTexWidthScaled, pTexHeightScaled, pMirror, Direction.SOUTH);
         }
 
-        public Wing(int pTexCoordU, int pTexCoordV, float pMinX, float pMinY, float pMinZ, float pDimensionX, float pDimensionY, float pDimensionZ, float pGrowX, float pGrowY, float pGrowZ, boolean pMirror, float pTexWidthScaled, float pTexHeightScaled) {
-            super(pTexCoordU, pTexCoordV, pMinX, pMinY, pMinZ, pDimensionX, pDimensionY, pDimensionZ, pGrowX, pGrowY, pGrowZ, pMirror, pTexWidthScaled, pTexHeightScaled);
+        public Wing(int pTexCoordU, int pTexCoordV, float pMinX, float pMinY, float pMinZ, float pDimensionX, float pDimensionY, float pDimensionZ, float pGrowX, float pGrowY, float pGrowZ, boolean pMirror, float pTexWidthScaled, float pTexHeightScaled, Set<Direction> visibleFaces) {
+            super(pTexCoordU, pTexCoordV, pMinX, pMinY, pMinZ, pDimensionX, pDimensionY, pDimensionZ, pGrowX, pGrowY, pGrowZ, pMirror, pTexWidthScaled, pTexHeightScaled, visibleFaces);
             this.x1 = pMinX;
             this.y1 = pMinY;
             this.z1 = pMinZ;
@@ -359,14 +359,14 @@ public final class Ducling extends ModelPart{
                 pMinX = f3;
             }
 
-            Ducling.Barb ducling$barb7 = new Ducling.Barb(pMinX, pMinY, pMinZ, 0.0F, 0.0F);
-            Ducling.Barb ducling$barb = new Ducling.Barb(f, pMinY, pMinZ, 0.0F, 8.0F);
-            Ducling.Barb ducling$barb1 = new Ducling.Barb(f, f1, pMinZ, 8.0F, 8.0F);
-            Ducling.Barb ducling$barb2 = new Ducling.Barb(pMinX, f1, pMinZ, 8.0F, 0.0F);
-            Ducling.Barb ducling$barb3 = new Ducling.Barb(pMinX, pMinY, f2, 0.0F, 0.0F);
-            Ducling.Barb ducling$barb4 = new Ducling.Barb(f, pMinY, f2, 0.0F, 8.0F);
-            Ducling.Barb ducling$barb5 = new Ducling.Barb(f, f1, f2, 8.0F, 8.0F);
-            Ducling.Barb ducling$barb6 = new Ducling.Barb(pMinX, f1, f2, 8.0F, 0.0F);
+            Ducling.Barb ducling$barb7 = new Ducling.Barb(pMinX, pMinY, pMinZ, 0.0F, 0.0F); // modelpart$vertex7
+            Ducling.Barb ducling$barb = new Ducling.Barb(f, pMinY, pMinZ, 0.0F, 8.0F); // modelpart$vertex
+            Ducling.Barb ducling$barb1 = new Ducling.Barb(f, f1, pMinZ, 8.0F, 8.0F); // modelpart$vertex1
+            Ducling.Barb ducling$barb2 = new Ducling.Barb(pMinX, f1, pMinZ, 8.0F, 0.0F); // modelpart$vertex2
+            Ducling.Barb ducling$barb3 = new Ducling.Barb(pMinX, pMinY, f2, 0.0F, 0.0F); // modelpart$vertex3
+            Ducling.Barb ducling$barb4 = new Ducling.Barb(f, pMinY, f2, 0.0F, 8.0F); // modelpart$vertex4
+            Ducling.Barb ducling$barb5 = new Ducling.Barb(f, f1, f2, 8.0F, 8.0F); // modelpart$vertex5
+            Ducling.Barb ducling$barb6 = new Ducling.Barb(pMinX, f1, f2, 8.0F, 0.0F); // modelpart$vertex6
             float f4 = (float)pTexCoordU;
             float f5 = (float)pTexCoordU + pDimensionZ;
             float f6 = (float)pTexCoordU + pDimensionZ + pDimensionX;
@@ -376,13 +376,30 @@ public final class Ducling extends ModelPart{
             float f10 = (float)pTexCoordV;
             float f11 = (float)pTexCoordV + pDimensionZ;
             float f12 = (float)pTexCoordV + pDimensionZ + pDimensionY;
-            
-            this.feathers[2] = new Ducling.Feather(new Ducling.Barb[]{ducling$barb4, ducling$barb3, ducling$barb7, ducling$barb}, f5, f10, f6, f11, pTexWidthScaled, pTexHeightScaled, pMirror, Direction.DOWN);
-            this.feathers[3] = new Ducling.Feather(new Ducling.Barb[]{ducling$barb1, ducling$barb2, ducling$barb6, ducling$barb5}, f6, f11, f7, f10, pTexWidthScaled, pTexHeightScaled, pMirror, Direction.UP);
-            this.feathers[1] = new Ducling.Feather(new Ducling.Barb[]{ducling$barb7, ducling$barb3, ducling$barb6, ducling$barb2}, f4, f11, f5, f12, pTexWidthScaled, pTexHeightScaled, pMirror, Direction.WEST);
-            this.feathers[4] = new Ducling.Feather(new Ducling.Barb[]{ducling$barb, ducling$barb7, ducling$barb2, ducling$barb1}, f5, f11, f6, f12, pTexWidthScaled, pTexHeightScaled, pMirror, Direction.NORTH);
-            this.feathers[0] = new Ducling.Feather(new Ducling.Barb[]{ducling$barb4, ducling$barb, ducling$barb1, ducling$barb5}, f6, f11, f8, f12, pTexWidthScaled, pTexHeightScaled, pMirror, Direction.EAST);
-            this.feathers[5] = new Ducling.Feather(new Ducling.Barb[]{ducling$barb3, ducling$barb4, ducling$barb5, ducling$barb6}, f8, f11, f9, f12, pTexWidthScaled, pTexHeightScaled, pMirror, Direction.SOUTH);
+            int i = 0;
+            if (visibleFaces.contains(Direction.DOWN)) {
+                this.feathers[i++] = new Ducling.Feather(new Ducling.Barb[]{ducling$barb4, ducling$barb3, ducling$barb7, ducling$barb}, f5, f10, f6, f11, pTexWidthScaled, pTexHeightScaled, pMirror, Direction.DOWN);
+            }
+
+            if (visibleFaces.contains(Direction.UP)) {
+                this.feathers[i++] = new Ducling.Feather(new Ducling.Barb[]{ducling$barb1, ducling$barb2, ducling$barb6, ducling$barb5}, f6, f11, f7, f10, pTexWidthScaled, pTexHeightScaled, pMirror, Direction.UP);
+            }
+
+            if (visibleFaces.contains(Direction.WEST)) {
+                this.feathers[i++] = new Ducling.Feather(new Ducling.Barb[]{ducling$barb7, ducling$barb3, ducling$barb6, ducling$barb2}, f4, f11, f5, f12, pTexWidthScaled, pTexHeightScaled, pMirror, Direction.WEST);
+            }
+
+            if (visibleFaces.contains(Direction.NORTH)) {
+                this.feathers[i++] = new Ducling.Feather(new Ducling.Barb[]{ducling$barb, ducling$barb7, ducling$barb2, ducling$barb}, f5, f11, f6, f12, pTexWidthScaled, pTexHeightScaled, pMirror, Direction.NORTH);
+            }
+
+            if (visibleFaces.contains(Direction.EAST)) {
+                this.feathers[i++] = new Ducling.Feather(new Ducling.Barb[]{ducling$barb4, ducling$barb, ducling$barb1, ducling$barb5}, f6, f11, f8, f12, pTexWidthScaled, pTexHeightScaled, pMirror, Direction.EAST);
+            }
+
+            if (visibleFaces.contains(Direction.SOUTH)) {
+                    this.feathers[i] = new Ducling.Feather(new Ducling.Barb[]{ducling$barb3, ducling$barb4, ducling$barb5, ducling$barb6}, f8, f11, f9, f12, pTexWidthScaled, pTexHeightScaled, pMirror, Direction.SOUTH);
+            }
         }
 
 
