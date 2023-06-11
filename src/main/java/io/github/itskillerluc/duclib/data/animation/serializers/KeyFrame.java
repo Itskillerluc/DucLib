@@ -2,7 +2,6 @@ package io.github.itskillerluc.duclib.data.animation.serializers;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import net.minecraft.Util;
 
 public record KeyFrame(double[] pre, double[] post, String lerpMode) {
     public static KeyFrame deserialize(JsonElement json) throws JsonParseException {
