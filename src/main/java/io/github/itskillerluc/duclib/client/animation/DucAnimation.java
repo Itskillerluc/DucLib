@@ -57,9 +57,15 @@ public abstract class DucAnimation {
                     }
                     scales.add(createKeyFrameFor(i, entries, false, AnimationChannel.Targets.SCALE));
                 }
+
+                positions.sort(Comparator.comparingDouble(Keyframe::timestamp));
+                rotations.sort(Comparator.comparingDouble(Keyframe::timestamp));
+                scales.sort(Comparator.comparingDouble(Keyframe::timestamp));
+
                 AnimationChannel positionChannel = new AnimationChannel(AnimationChannel.Targets.POSITION, positions.toArray(new Keyframe[0]));
                 AnimationChannel rotationChannel = new AnimationChannel(AnimationChannel.Targets.ROTATION, rotations.toArray(new Keyframe[0]));
                 AnimationChannel scaleChannel = new AnimationChannel(AnimationChannel.Targets.SCALE, scales.toArray(new Keyframe[0]));
+
                 if (positionChannel.keyframes().length > 0){
                     builder.addAnimation(bones.getKey(), positionChannel);
                 }
