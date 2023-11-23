@@ -35,7 +35,7 @@ public record KeyFrame(double[] pre, double[] post, String lerpMode) {
             post = null;
         }
         JsonElement lerpModeJson = json.getAsJsonObject().get("lerp_mode");
-        String lerpMode = lerpModeJson.getAsString();
+        String lerpMode = lerpModeJson != null ? lerpModeJson.getAsString() : "linear";
         return new KeyFrame(pre, post, lerpMode);
     }
 }

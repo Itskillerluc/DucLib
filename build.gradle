@@ -18,7 +18,7 @@ apply plugin: 'maven-publish'
 apply plugin: "org.spongepowered.mixin"
 apply plugin: 'java'
 
-version = '1.1'
+version = '1.1.2'
 group = 'io.github.itskillerluc.duclib' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'duclib-1.20'
 
@@ -151,7 +151,7 @@ dependencies {
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // implementation fg.deobf("com.tterrag.registrate:Registrate:MC${mc_version}-${registrate_version}") // Adds registrate as a dependency
-
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     // Examples using mod jars from ./libs
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
 
@@ -175,11 +175,14 @@ jar {
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : "itskillerluc",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "MixinConfigs" : "duclib.mixin.json"
         ])
     }
 }
 
+mixin {
+    add sourceSets.main, 'mixins.duclib.refmap.json'
+    config 'mixins.duclib.json'
+}
 // Example configuration to allow publishing using the maven-publish plugin
 // This is the preferred method to reobfuscate your jar file
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
